@@ -51,7 +51,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ehealthinformatics.prognocare.designsystem.components.EmptyState
 import com.ehealthinformatics.prognocare.designsystem.components.StatusBadge
 import com.ehealthinformatics.prognocare.designsystem.components.StatusType
-import com.ehealthinformatics.prognocare.designsystem.theme.Primary
+import com.ehealthinformatics.prognocare.designsystem.theme.AppThemeColors
 import com.ehealthinformatics.prognocare.designsystem.theme.Spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -94,7 +94,7 @@ fun SpecialistReferralScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { /* new referral */ },
-                containerColor = Primary,
+                containerColor = MaterialTheme.colorScheme.primary,
             ) {
                 Icon(Icons.Default.Add, contentDescription = "New Referral")
             }
@@ -182,10 +182,10 @@ private fun ReferralDetailCard(
     }
 
     val priorityColor = when (referral.priority) {
-        ReferralPriority.URGENT -> Color(0xFFDC2626)
-        ReferralPriority.HIGH -> Color(0xFFF59E0B)
-        ReferralPriority.NORMAL -> Primary
-        ReferralPriority.LOW -> Color(0xFF6B7280)
+        ReferralPriority.URGENT -> MaterialTheme.colorScheme.error
+        ReferralPriority.HIGH -> AppThemeColors.current.warning
+        ReferralPriority.NORMAL -> MaterialTheme.colorScheme.primary
+        ReferralPriority.LOW -> MaterialTheme.colorScheme.onSurfaceVariant
     }
 
     Card(

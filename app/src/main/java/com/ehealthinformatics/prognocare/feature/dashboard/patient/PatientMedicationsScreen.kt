@@ -51,9 +51,7 @@ import androidx.compose.ui.unit.dp
 import com.ehealthinformatics.prognocare.designsystem.components.EmptyState
 import com.ehealthinformatics.prognocare.designsystem.components.StatusBadge
 import com.ehealthinformatics.prognocare.designsystem.components.StatusType
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiGreen
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiGreenLight
-import com.ehealthinformatics.prognocare.designsystem.theme.Primary
+import com.ehealthinformatics.prognocare.designsystem.theme.AppThemeColors
 import com.ehealthinformatics.prognocare.designsystem.theme.Spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -217,13 +215,13 @@ private fun PatientMedicationDetailCard(
                         modifier = Modifier
                             .size(44.dp)
                             .clip(RoundedCornerShape(Spacing.sm))
-                    .background(KpiGreenLight),
+                    .background(AppThemeColors.current.kpiGreenLight),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
                     imageVector = Icons.Outlined.MedicalServices,
                     contentDescription = null,
-                    tint = KpiGreen,
+                    tint = AppThemeColors.current.kpiGreen,
                             modifier = Modifier.size(22.dp),
                         )
                     }
@@ -306,7 +304,7 @@ private fun PatientMedicationDetailCard(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(Spacing.sm),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color(0xFFFFF3CD).copy(alpha = 0.3f),
+                        containerColor = AppThemeColors.current.warningContainer.copy(alpha = 0.3f),
                     ),
                 ) {
                     Row(
@@ -318,14 +316,14 @@ private fun PatientMedicationDetailCard(
                         Icon(
                             imageVector = Icons.Default.Notifications,
                             contentDescription = null,
-                            tint = Color(0xFF78350F),
+                            tint = AppThemeColors.current.onWarningContainer,
                             modifier = Modifier.size(18.dp),
                         )
                         Spacer(modifier = Modifier.width(Spacing.sm))
                         Text(
                             text = "Refill needed by ${medication.refillDate}",
                             style = MaterialTheme.typography.bodySmall,
-                            color = Color(0xFF78350F),
+                            color = AppThemeColors.current.onWarningContainer,
                             fontWeight = FontWeight.Medium,
                         )
                     }

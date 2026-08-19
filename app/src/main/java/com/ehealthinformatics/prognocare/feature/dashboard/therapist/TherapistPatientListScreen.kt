@@ -50,11 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ehealthinformatics.prognocare.designsystem.components.EmptyState
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiBlue
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiBlueLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiGreen
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiOrange
-import com.ehealthinformatics.prognocare.designsystem.theme.Primary
+import com.ehealthinformatics.prognocare.designsystem.theme.AppThemeColors
 import com.ehealthinformatics.prognocare.designsystem.theme.Spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -191,9 +187,9 @@ private fun PatientCard(
     modifier: Modifier = Modifier,
 ) {
     val progressColor = when {
-        patient.progressPercent >= 75 -> KpiGreen
-        patient.progressPercent >= 50 -> KpiBlue
-        else -> KpiOrange
+        patient.progressPercent >= 75 -> AppThemeColors.current.kpiGreen
+        patient.progressPercent >= 50 -> AppThemeColors.current.kpiBlue
+        else -> AppThemeColors.current.kpiOrange
     }
 
     Card(
@@ -218,13 +214,13 @@ private fun PatientCard(
                     modifier = Modifier
                         .size(48.dp)
                         .clip(CircleShape)
-                        .background(KpiBlueLight),
+                        .background(AppThemeColors.current.kpiBlueLight),
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
                         text = patient.name.take(1),
                         style = MaterialTheme.typography.titleMedium,
-                        color = Primary,
+                        color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Bold,
                     )
                 }
@@ -241,12 +237,12 @@ private fun PatientCard(
                     Text(
                         text = "${patient.mrn} · ${patient.age}y",
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color(0xFF6B7280),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                     Text(
                         text = patient.condition,
                         style = MaterialTheme.typography.labelMedium,
-                        color = Primary,
+                        color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Medium,
                     )
                 }
@@ -256,13 +252,13 @@ private fun PatientCard(
                     Text(
                         text = if (patient.isOngoing) "Ongoing" else "Completed",
                         style = MaterialTheme.typography.labelSmall,
-                        color = if (patient.isOngoing) KpiGreen else Color(0xFF6B7280),
+                        color = if (patient.isOngoing) AppThemeColors.current.kpiGreen else MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                     if (patient.nextSession != null) {
                         Text(
                             text = "Next: ${patient.nextSession}",
                             style = MaterialTheme.typography.labelSmall,
-                            color = Color(0xFF6B7280),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
                 }
@@ -279,7 +275,7 @@ private fun PatientCard(
                 Text(
                     text = patient.therapyType,
                     style = MaterialTheme.typography.labelSmall,
-                    color = Color(0xFF6B7280),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Text(
                     text = "${patient.sessionsCompleted}/${patient.totalSessions} sessions (${patient.progressPercent}%)",
@@ -296,7 +292,7 @@ private fun PatientCard(
                     .height(6.dp)
                     .clip(RoundedCornerShape(3.dp)),
                 color = progressColor,
-                trackColor = Color(0xFFE2E8F0),
+                trackColor = MaterialTheme.colorScheme.outlineVariant,
             )
         }
     }

@@ -72,6 +72,18 @@ data class ThemeColors(
     val cancelledContainer: Color,
     val critical: Color,
     val criticalContainer: Color,
+    // Semantic on-container colors
+    val onSuccessContainer: Color,
+    val onWarningContainer: Color,
+    val onInfoContainer: Color,
+    val onCriticalContainer: Color,
+    val onPendingContainer: Color,
+    val onScheduledContainer: Color,
+    val onInProgressContainer: Color,
+    val onCancelledContainer: Color,
+    val onCompletedContainer: Color,
+    // Divider
+    val divider: Color,
     // KPI accent colors
     val kpiBlue: Color,
     val kpiBlueLight: Color,
@@ -102,7 +114,7 @@ fun getLightColors(theme: ColorTheme, customPrimary: Color? = null): ThemeColors
     }
     
     return ThemeColors(
-        // Primary
+        // MaterialTheme.colorScheme.primary
         primary = primary,
         onPrimary = Color.White,
         primaryContainer = primary.copy(alpha = 0.12f),
@@ -158,6 +170,20 @@ fun getLightColors(theme: ColorTheme, customPrimary: Color? = null): ThemeColors
         critical = Color(0xFFDC2626),
         criticalContainer = Color(0xFFFEE2E2),
         
+        // Semantic on-container colors
+        onSuccessContainer = Color(0xFF14532D),
+        onWarningContainer = Color(0xFF78350F),
+        onInfoContainer = Color(0xFF1E3A5F),
+        onCriticalContainer = Color(0xFF7F1D1D),
+        onPendingContainer = Color(0xFF78350F),
+        onScheduledContainer = Color(0xFF1E3A5F),
+        onInProgressContainer = Color(0xFF14532D),
+        onCancelledContainer = Color(0xFF475569),
+        onCompletedContainer = Color(0xFF334155),
+        
+        // Divider
+        divider = Color(0xFFE2E8F0),
+        
         // KPI accents
         kpiBlue = primary,
         kpiBlueLight = primary.copy(alpha = 0.12f),
@@ -190,75 +216,92 @@ fun getDarkColors(theme: ColorTheme, customPrimary: Color? = null): ThemeColors 
     }
     
     return ThemeColors(
-        // Primary
+        // Primary - brighter for dark backgrounds
         primary = primary,
-        onPrimary = Color(0xFF0F172A),
-        primaryContainer = primary.copy(alpha = 0.2f),
-        onPrimaryContainer = primary,
+        onPrimary = Color(0xFF0A1628),
+        primaryContainer = primary.copy(alpha = 0.18f),
+        onPrimaryContainer = primary.copy(alpha = 0.9f),
         
         // Secondary
-        secondary = Color(0xFF94A3B8),
-        onSecondary = Color(0xFF0F172A),
-        secondaryContainer = Color(0xFF334155),
-        onSecondaryContainer = Color(0xFFE2E8F0),
+        secondary = Color(0xFF8899AD),
+        onSecondary = Color(0xFF0A1628),
+        secondaryContainer = Color(0xFF1C2A3D),
+        onSecondaryContainer = Color(0xFFCBD5E1),
         
-        // Tertiary
-        tertiary = Color(0xFF4ADE80),
-        onTertiary = Color(0xFF14532D),
-        tertiaryContainer = Color(0xFF14532D),
-        onTertiaryContainer = Color(0xFFDCFCE7),
+        // Tertiary - healthcare green
+        tertiary = Color(0xFF34D399),
+        onTertiary = Color(0xFF0A1628),
+        tertiaryContainer = Color(0xFF0D3326),
+        onTertiaryContainer = Color(0xFFA7F3D0),
         
         // Error
-        error = Color(0xFFFCA5A5),
-        onError = Color(0xFF601410),
-        errorContainer = Color(0xFF8C1D18),
-        onErrorContainer = Color(0xFFFECACA),
+        error = Color(0xFFFF8A80),
+        onError = Color(0xFF3B0A0A),
+        errorContainer = Color(0xFF5C1515),
+        onErrorContainer = Color(0xFFFFCDD2),
         
-        // Background & Surface
-        background = Color(0xFF0F172A),
-        onBackground = Color(0xFFE2E8F0),
-        surface = Color(0xFF1E293B),
-        onSurface = Color(0xFFE2E8F0),
-        surfaceVariant = Color(0xFF334155),
-        onSurfaceVariant = Color(0xFF94A3B8),
+        // ── Layered Surface Hierarchy ──────────────────────
+        // Level 0: App background (deepest)
+        background = Color(0xFF0B1120),
+        onBackground = Color(0xFFE0E7EF),
+        // Level 1: Cards, sheets on background
+        surface = Color(0xFF141D2E),
+        onSurface = Color(0xFFE0E7EF),
+        // Level 2: Elevated elements, chips, badges
+        surfaceVariant = Color(0xFF1C2940),
+        onSurfaceVariant = Color(0xFF8899AD),
         
-        // Outline
-        outline = Color(0xFF475569),
-        outlineVariant = Color(0xFF334155),
+        // Outline - subtle borders
+        outline = Color(0xFF2D3E54),
+        outlineVariant = Color(0xFF1C2940),
         
-        // Semantic Healthcare
-        success = Color(0xFF4ADE80),
-        successContainer = Color(0xFF14532D),
+        // ── Semantic Healthcare Colors ─────────────────────
+        success = Color(0xFF34D399),
+        successContainer = Color(0xFF0D3326),
         warning = Color(0xFFFBBF24),
-        warningContainer = Color(0xFF78350F),
+        warningContainer = Color(0xFF5C3D0A),
         info = primary,
-        infoContainer = primary.copy(alpha = 0.2f),
+        infoContainer = primary.copy(alpha = 0.15f),
         pending = Color(0xFFFBBF24),
-        pendingContainer = Color(0xFF78350F),
+        pendingContainer = Color(0xFF5C3D0A),
         scheduled = primary,
-        scheduledContainer = primary.copy(alpha = 0.2f),
-        inProgress = Color(0xFF4ADE80),
-        inProgressContainer = Color(0xFF14532D),
-        completed = Color(0xFF94A3B8),
-        completedContainer = Color(0xFF334155),
-        cancelled = Color(0xFF64748B),
-        cancelledContainer = Color(0xFF334155),
-        critical = Color(0xFFFCA5A5),
-        criticalContainer = Color(0xFF8C1D18),
+        scheduledContainer = primary.copy(alpha = 0.15f),
+        inProgress = Color(0xFF34D399),
+        inProgressContainer = Color(0xFF0D3326),
+        completed = Color(0xFF8899AD),
+        completedContainer = Color(0xFF1C2940),
+        cancelled = Color(0xFF5E6E82),
+        cancelledContainer = Color(0xFF1C2940),
+        critical = Color(0xFFFF8A80),
+        criticalContainer = Color(0xFF5C1515),
         
-        // KPI accents
+        // ── On-container text (must be readable) ───────────
+        onSuccessContainer = Color(0xFFA7F3D0),
+        onWarningContainer = Color(0xFFFDE68A),
+        onInfoContainer = Color(0xFFBFDBFE),
+        onCriticalContainer = Color(0xFFFFCDD2),
+        onPendingContainer = Color(0xFFFDE68A),
+        onScheduledContainer = Color(0xFFBFDBFE),
+        onInProgressContainer = Color(0xFFA7F3D0),
+        onCancelledContainer = Color(0xFFCBD5E1),
+        onCompletedContainer = Color(0xFFCBD5E1),
+        
+        // Divider
+        divider = Color(0xFF1C2940),
+        
+        // ── KPI Accents (lighter for dark backgrounds) ─────
         kpiBlue = primary,
-        kpiBlueLight = primary.copy(alpha = 0.2f),
-        kpiGreen = Color(0xFF4ADE80),
-        kpiGreenLight = Color(0xFF14532D),
+        kpiBlueLight = primary.copy(alpha = 0.15f),
+        kpiGreen = Color(0xFF34D399),
+        kpiGreenLight = Color(0xFF0D3326),
         kpiPurple = Color(0xFFA78BFA),
-        kpiPurpleLight = Color(0xFF2E1065),
+        kpiPurpleLight = Color(0xFF2E1065).copy(alpha = 0.6f),
         kpiOrange = Color(0xFFFB923C),
-        kpiOrangeLight = Color(0xFF7C2D12),
+        kpiOrangeLight = Color(0xFF7C2D12).copy(alpha = 0.6f),
         
         // Notification
-        notificationBadge = Color(0xFFFCA5A5),
-        onNotificationBadge = Color(0xFF601410)
+        notificationBadge = Color(0xFFFF8A80),
+        onNotificationBadge = Color(0xFF3B0A0A)
     )
 }
 

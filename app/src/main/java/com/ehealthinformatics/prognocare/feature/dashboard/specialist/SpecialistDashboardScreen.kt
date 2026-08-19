@@ -51,16 +51,7 @@ import com.ehealthinformatics.prognocare.designsystem.components.DashboardQuickA
 import com.ehealthinformatics.prognocare.designsystem.components.SectionHeader
 import com.ehealthinformatics.prognocare.designsystem.components.StatusBadge
 import com.ehealthinformatics.prognocare.designsystem.components.StatusType
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiBlue
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiBlueLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiGreen
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiGreenLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiOrange
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiOrangeLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiPurple
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiPurpleLight
-import com.ehealthinformatics.prognocare.designsystem.theme.NotificationBadge
-import com.ehealthinformatics.prognocare.designsystem.theme.Primary
+import com.ehealthinformatics.prognocare.designsystem.theme.AppThemeColors
 import com.ehealthinformatics.prognocare.designsystem.theme.Spacing
 
 @Composable
@@ -78,8 +69,8 @@ fun SpecialistDashboardScreen(
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = { /* new referral */ },
-                containerColor = Primary,
-                contentColor = Color.White,
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
                 shape = RoundedCornerShape(Spacing.lg),
                 elevation = FloatingActionButtonDefaults.elevation(
                     defaultElevation = 6.dp,
@@ -116,34 +107,34 @@ fun SpecialistDashboardScreen(
                             Text(
                                 text = "${state.greeting},",
                                 style = MaterialTheme.typography.bodyLarge,
-                                color = Color(0xFF6B7280),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                             Text(
                                 text = state.specialistName,
                                 style = MaterialTheme.typography.headlineMedium,
                                 fontWeight = FontWeight.Bold,
-                                color = Primary,
+                                color = MaterialTheme.colorScheme.primary,
                             )
                             Spacer(modifier = Modifier.height(Spacing.xs))
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(
                                     imageVector = Icons.Default.CalendarMonth,
                                     contentDescription = null,
-                                    tint = Primary,
+                                    tint = MaterialTheme.colorScheme.primary,
                                     modifier = Modifier.size(16.dp),
                                 )
                                 Spacer(modifier = Modifier.width(Spacing.xs))
                                 Text(
                                     text = state.todayDate,
                                     style = MaterialTheme.typography.bodyMedium,
-                                    color = Color(0xFF6B7280),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
                             }
                             Spacer(modifier = Modifier.height(Spacing.xxs))
                             Text(
                                 text = state.specialty,
                                 style = MaterialTheme.typography.labelLarge,
-                                color = Primary.copy(alpha = 0.7f),
+                                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f),
                                 fontWeight = FontWeight.Medium,
                             )
                         }
@@ -155,7 +146,7 @@ fun SpecialistDashboardScreen(
                                     Icon(
                                         imageVector = Icons.Default.Notifications,
                                         contentDescription = "Notifications",
-                                        tint = Color(0xFF6B7280),
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                         modifier = Modifier.size(28.dp),
                                     )
                                 }
@@ -165,13 +156,13 @@ fun SpecialistDashboardScreen(
                                             .align(Alignment.TopEnd)
                                             .size(20.dp)
                                             .clip(CircleShape)
-                                            .background(NotificationBadge),
+                                            .background(AppThemeColors.current.notificationBadge),
                                         contentAlignment = Alignment.Center,
                                     ) {
                                         Text(
                                             text = "${state.urgentCases}",
                                             style = MaterialTheme.typography.labelSmall,
-                                            color = Color.White,
+                                            color = MaterialTheme.colorScheme.onPrimary,
                                             fontWeight = FontWeight.Bold,
                                         )
                                     }
@@ -185,14 +176,14 @@ fun SpecialistDashboardScreen(
                                 modifier = Modifier
                                     .size(48.dp)
                                     .clip(CircleShape)
-                                    .background(Primary)
+                                    .background(MaterialTheme.colorScheme.primary)
                                     .clickable { onNavigateToProfile() },
                                 contentAlignment = Alignment.Center,
                             ) {
                                 Text(
                                     text = state.specialistName.take(1),
                                     style = MaterialTheme.typography.titleLarge,
-                                    color = Color.White,
+                                    color = MaterialTheme.colorScheme.onPrimary,
                                     fontWeight = FontWeight.Bold,
                                 )
                             }
@@ -215,8 +206,8 @@ fun SpecialistDashboardScreen(
                             title = "Pending Referrals",
                             value = "${state.pendingReferrals}",
                             icon = Icons.Outlined.Pending,
-                            iconTint = KpiOrange,
-                            iconBg = KpiOrangeLight,
+                            iconTint = AppThemeColors.current.kpiOrange,
+                            iconBg = AppThemeColors.current.kpiOrangeLight,
                             onClick = onNavigateToReferrals,
                             modifier = Modifier.weight(1f),
                         )
@@ -224,8 +215,8 @@ fun SpecialistDashboardScreen(
                             title = "Active Patients",
                             value = "${state.activePatients}",
                             icon = Icons.Default.Person,
-                            iconTint = KpiPurple,
-                            iconBg = KpiPurpleLight,
+                            iconTint = AppThemeColors.current.kpiPurple,
+                            iconBg = AppThemeColors.current.kpiPurpleLight,
                             onClick = onNavigateToPatients,
                             modifier = Modifier.weight(1f),
                         )
@@ -238,8 +229,8 @@ fun SpecialistDashboardScreen(
                             title = "Completed",
                             value = "${state.completedReviews}",
                             icon = Icons.Default.CheckCircle,
-                            iconTint = KpiGreen,
-                            iconBg = KpiGreenLight,
+                            iconTint = AppThemeColors.current.kpiGreen,
+                            iconBg = AppThemeColors.current.kpiGreenLight,
                             onClick = { /* completed */ },
                             modifier = Modifier.weight(1f),
                         )
@@ -247,8 +238,8 @@ fun SpecialistDashboardScreen(
                             title = "Urgent Cases",
                             value = "${state.urgentCases}",
                             icon = Icons.Default.Error,
-                            iconTint = Color(0xFFDC2626),
-                            iconBg = Color(0xFFFEE2E2),
+                            iconTint = MaterialTheme.colorScheme.error,
+                            iconBg = MaterialTheme.colorScheme.errorContainer,
                             onClick = { /* urgent */ },
                             modifier = Modifier.weight(1f),
                         )
@@ -268,32 +259,32 @@ fun SpecialistDashboardScreen(
                         DashboardQuickAction(
                             icon = Icons.Outlined.Assignment,
                             label = "Review Referral",
-                            iconTint = KpiBlue,
-                            iconBg = KpiBlueLight,
+                            iconTint = AppThemeColors.current.kpiBlue,
+                            iconBg = AppThemeColors.current.kpiBlueLight,
                             onClick = onNavigateToReferrals,
                             modifier = Modifier.weight(1f),
                         )
                         DashboardQuickAction(
                             icon = Icons.Default.Person,
                             label = "Patient List",
-                            iconTint = KpiPurple,
-                            iconBg = KpiPurpleLight,
+                            iconTint = AppThemeColors.current.kpiPurple,
+                            iconBg = AppThemeColors.current.kpiPurpleLight,
                             onClick = onNavigateToPatients,
                             modifier = Modifier.weight(1f),
                         )
                         DashboardQuickAction(
                             icon = Icons.Outlined.MedicalServices,
                             label = "Consultation",
-                            iconTint = KpiGreen,
-                            iconBg = KpiGreenLight,
+                            iconTint = AppThemeColors.current.kpiGreen,
+                            iconBg = AppThemeColors.current.kpiGreenLight,
                             onClick = { /* new consultation */ },
                             modifier = Modifier.weight(1f),
                         )
                         DashboardQuickAction(
                             icon = Icons.Default.CalendarMonth,
                             label = "Schedule",
-                            iconTint = KpiOrange,
-                            iconBg = KpiOrangeLight,
+                            iconTint = AppThemeColors.current.kpiOrange,
+                            iconBg = AppThemeColors.current.kpiOrangeLight,
                             onClick = { /* schedule */ },
                             modifier = Modifier.weight(1f),
                         )
@@ -371,10 +362,10 @@ private fun ReferralCard(
     }
 
     val priorityColor = when (referral.priority) {
-        ReferralPriority.URGENT -> Color(0xFFDC2626)
-        ReferralPriority.HIGH -> Color(0xFFF59E0B)
-        ReferralPriority.NORMAL -> Primary
-        ReferralPriority.LOW -> Color(0xFF6B7280)
+        ReferralPriority.URGENT -> MaterialTheme.colorScheme.error
+        ReferralPriority.HIGH -> AppThemeColors.current.warning
+        ReferralPriority.NORMAL -> MaterialTheme.colorScheme.primary
+        ReferralPriority.LOW -> MaterialTheme.colorScheme.onSurfaceVariant
     }
 
     androidx.compose.material3.Card(

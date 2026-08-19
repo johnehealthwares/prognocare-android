@@ -41,15 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ehealthinformatics.prognocare.designsystem.components.StatusBadge
 import com.ehealthinformatics.prognocare.designsystem.components.StatusType
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiBlue
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiBlueLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiGreen
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiGreenLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiOrange
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiOrangeLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiPurple
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiPurpleLight
-import com.ehealthinformatics.prognocare.designsystem.theme.Primary
+import com.ehealthinformatics.prognocare.designsystem.theme.AppThemeColors
 import com.ehealthinformatics.prognocare.designsystem.theme.Spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -112,26 +104,26 @@ fun FinanceBillDetailScreen(
                         ) {
                             Column {
                                 Text(bill.patientName, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                                Text("MRN: ${bill.patientMrn}", style = MaterialTheme.typography.bodyMedium, color = Color(0xFF6B7280))
+                                Text("MRN: ${bill.patientMrn}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
                             StatusBadge(text = billStatusText, type = billStatusType)
                         }
                         Spacer(modifier = Modifier.height(Spacing.md))
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                             Column {
-                                Text("Bill Date", style = MaterialTheme.typography.labelSmall, color = Color(0xFF6B7280))
+                                Text("Bill Date", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 Text(bill.date, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
                             }
                             Column(horizontalAlignment = Alignment.End) {
-                                Text("Due Date", style = MaterialTheme.typography.labelSmall, color = Color(0xFF6B7280))
+                                Text("Due Date", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 Text(bill.dueDate, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium,
-                                    color = if (bill.status == BillStatus.OVERDUE) Color(0xFFDC2626) else Color(0xFF1E293B))
+                                    color = if (bill.status == BillStatus.OVERDUE) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface)
                             }
                         }
                         if (bill.notes != null) {
                             Spacer(modifier = Modifier.height(Spacing.md))
-                            Text("Notes", style = MaterialTheme.typography.labelSmall, color = Color(0xFF6B7280))
-                            Text(bill.notes, style = MaterialTheme.typography.bodySmall, color = Color(0xFF475569))
+                            Text("Notes", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text(bill.notes, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
                 }
@@ -142,24 +134,24 @@ fun FinanceBillDetailScreen(
                 Card(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = Spacing.lg),
                     shape = RoundedCornerShape(Spacing.base),
-                    colors = CardDefaults.cardColors(containerColor = KpiBlueLight),
+                    colors = CardDefaults.cardColors(containerColor = AppThemeColors.current.kpiBlueLight),
                 ) {
                     Column(modifier = Modifier.fillMaxWidth().padding(Spacing.base)) {
-                        Text("Payment Summary", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = Primary)
+                        Text("Payment Summary", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
                         Spacer(modifier = Modifier.height(Spacing.md))
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                             Column {
-                                Text("Total Amount", style = MaterialTheme.typography.labelSmall, color = Color(0xFF6B7280))
-                                Text(bill.totalDisplay, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Color(0xFF1E293B))
+                                Text("Total Amount", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text(bill.totalDisplay, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
                             }
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Text("Paid", style = MaterialTheme.typography.labelSmall, color = Color(0xFF6B7280))
-                                Text(bill.paidDisplay, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = KpiGreen)
+                                Text("Paid", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text(bill.paidDisplay, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = AppThemeColors.current.kpiGreen)
                             }
                             Column(horizontalAlignment = Alignment.End) {
-                                Text("Balance", style = MaterialTheme.typography.labelSmall, color = Color(0xFF6B7280))
+                                Text("Balance", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 Text(bill.balanceDisplay, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold,
-                                    color = if (bill.balanceAmount > 0) KpiOrange else KpiGreen)
+                                    color = if (bill.balanceAmount > 0) AppThemeColors.current.kpiOrange else AppThemeColors.current.kpiGreen)
                             }
                         }
                     }
@@ -194,11 +186,11 @@ fun FinanceBillDetailScreen(
                     elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
                 ) {
                     Column(modifier = Modifier.fillMaxWidth().padding(Spacing.base)) {
-                        HorizontalDivider(color = Color(0xFFE2E8F0))
+                        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                         Spacer(modifier = Modifier.height(Spacing.md))
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                             Text("Total (${items.size} items)", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                            Text(bill.totalDisplay, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Primary)
+                            Text(bill.totalDisplay, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
                         }
                     }
                 }
@@ -225,13 +217,13 @@ fun FinanceBillDetailScreen(
 @Composable
 private fun LineItemRow(item: BillLineItem) {
     val (iconBg, iconTint) = when (item.category) {
-        ItemCategory.CONSULTATION -> KpiBlueLight to KpiBlue
-        ItemCategory.PROCEDURE -> KpiGreenLight to KpiGreen
-        ItemCategory.LAB_TEST -> Color(0xFFFCE7F3) to Color(0xFFEC4899)
-        ItemCategory.IMAGING -> KpiPurpleLight to KpiPurple
-        ItemCategory.MEDICATION -> KpiOrangeLight to KpiOrange
-        ItemCategory.ROOM_CHARGE -> Color(0xFFE0E7FF) to Color(0xFF6366F1)
-        ItemCategory.OTHER -> Color(0xFFF1F5F9) to Color(0xFF6B7280)
+        ItemCategory.CONSULTATION -> AppThemeColors.current.kpiBlueLight to AppThemeColors.current.kpiBlue
+        ItemCategory.PROCEDURE -> AppThemeColors.current.kpiGreenLight to AppThemeColors.current.kpiGreen
+        ItemCategory.LAB_TEST -> MaterialTheme.colorScheme.errorContainer to MaterialTheme.colorScheme.error
+        ItemCategory.IMAGING -> AppThemeColors.current.kpiPurpleLight to AppThemeColors.current.kpiPurple
+        ItemCategory.MEDICATION -> AppThemeColors.current.kpiOrangeLight to AppThemeColors.current.kpiOrange
+        ItemCategory.ROOM_CHARGE -> AppThemeColors.current.kpiPurpleLight to AppThemeColors.current.kpiPurple
+        ItemCategory.OTHER -> MaterialTheme.colorScheme.surfaceVariant to MaterialTheme.colorScheme.onSurfaceVariant
     }
 
     Card(
@@ -255,13 +247,13 @@ private fun LineItemRow(item: BillLineItem) {
                 Text(item.description, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
                 Text(
                     "${item.category.name.replace("_", " ").lowercase().replaceFirstChar { it.uppercase() }} · Qty: ${item.quantity}",
-                    style = MaterialTheme.typography.bodySmall, color = Color(0xFF6B7280),
+                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
             Column(horizontalAlignment = Alignment.End) {
-                Text(item.totalDisplay, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold, color = Color(0xFF1E293B))
+                Text(item.totalDisplay, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface)
                 if (item.quantity > 1) {
-                    Text("@ ${item.unitPriceDisplay} each", style = MaterialTheme.typography.labelSmall, color = Color(0xFF9CA3AF))
+                    Text("@ ${item.unitPriceDisplay} each", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
         }

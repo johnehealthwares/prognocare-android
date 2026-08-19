@@ -47,14 +47,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.ehealthinformatics.prognocare.R
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiBlue
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiBlueLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiGreen
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiGreenLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiOrange
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiOrangeLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiPurple
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiPurpleLight
+import com.ehealthinformatics.prognocare.designsystem.theme.AppThemeColors
 import com.ehealthinformatics.prognocare.designsystem.theme.Primary
 import com.ehealthinformatics.prognocare.designsystem.theme.PrimaryDark
 import kotlinx.coroutines.delay
@@ -99,7 +92,7 @@ fun SplashScreen() {
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
-                        Primary,
+                        MaterialTheme.colorScheme.primary,
                         PrimaryDark,
                     )
                 )
@@ -176,22 +169,22 @@ fun SplashScreen() {
                     FeatureIcon(
                         icon = Icons.Default.LocalHospital,
                         label = "Clinical",
-                        color = KpiBlueLight,
+                        color = AppThemeColors.current.kpiBlueLight,
                     )
                     FeatureIcon(
                         icon = Icons.Default.MedicalServices,
                         label = "Records",
-                        color = KpiGreenLight,
+                        color = AppThemeColors.current.kpiGreenLight,
                     )
                     FeatureIcon(
                         icon = Icons.Default.Favorite,
                         label = "Health",
-                        color = KpiOrangeLight,
+                        color = AppThemeColors.current.kpiOrangeLight,
                     )
                     FeatureIcon(
                         icon = Icons.Default.Check,
                         label = "Quality",
-                        color = KpiPurpleLight,
+                        color = AppThemeColors.current.kpiPurpleLight,
                     )
                 }
             }
@@ -242,7 +235,7 @@ private fun FeatureIcon(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = Primary,
+                tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(24.dp),
             )
         }

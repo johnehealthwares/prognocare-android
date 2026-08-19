@@ -322,9 +322,9 @@ private fun CustomColorSection(
             )
             Spacer(modifier = Modifier.height(12.dp))
             
-            // Primary color presets
+            // MaterialTheme.colorScheme.primary color presets
             Text(
-                text = "Primary Color",
+                text = "MaterialTheme.colorScheme.primary Color",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -432,7 +432,7 @@ private fun ThemePreviewSection(
                             .padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
                         Text(
-                            text = "Primary Button",
+                            text = "MaterialTheme.colorScheme.primary Button",
                             color = colors.onPrimary,
                             style = MaterialTheme.typography.labelMedium
                         )

@@ -54,16 +54,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ehealthinformatics.prognocare.designsystem.components.SectionHeader
 import com.ehealthinformatics.prognocare.designsystem.components.StatusBadge
 import com.ehealthinformatics.prognocare.designsystem.components.StatusType
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiBlue
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiBlueLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiGreen
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiGreenLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiOrange
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiOrangeLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiPurple
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiPurpleLight
-import com.ehealthinformatics.prognocare.designsystem.theme.NotificationBadge
-import com.ehealthinformatics.prognocare.designsystem.theme.Primary
+import com.ehealthinformatics.prognocare.designsystem.theme.AppThemeColors
 import com.ehealthinformatics.prognocare.designsystem.theme.Spacing
 
 @Composable
@@ -102,20 +93,20 @@ fun PatientDashboardScreen(
                             Text(
                                 text = "${state.greeting},",
                                 style = MaterialTheme.typography.bodyLarge,
-                                color = Color(0xFF6B7280),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                             Text(
                                 text = state.patientName,
                                 style = MaterialTheme.typography.headlineMedium,
                                 fontWeight = FontWeight.Bold,
-                                color = Color(0xFF1E293B),
+                                color = MaterialTheme.colorScheme.onSurface,
                             )
                             Spacer(modifier = Modifier.height(Spacing.xs))
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(
                                     text = state.tagline,
                                     style = MaterialTheme.typography.bodyMedium,
-                                    color = Color(0xFF6B7280),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
                                 Spacer(modifier = Modifier.width(Spacing.xs))
                                 Text(
@@ -132,7 +123,7 @@ fun PatientDashboardScreen(
                                     Icon(
                                         imageVector = Icons.Default.Notifications,
                                         contentDescription = "Notifications",
-                                        tint = Color(0xFF6B7280),
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                         modifier = Modifier.size(28.dp),
                                     )
                                 }
@@ -141,13 +132,13 @@ fun PatientDashboardScreen(
                                         .align(Alignment.TopEnd)
                                         .size(20.dp)
                                         .clip(CircleShape)
-                                        .background(NotificationBadge),
+                                        .background(AppThemeColors.current.notificationBadge),
                                     contentAlignment = Alignment.Center,
                                 ) {
                                     Text(
                                         text = "2",
                                         style = MaterialTheme.typography.labelSmall,
-                                        color = Color.White,
+                                        color = MaterialTheme.colorScheme.onPrimary,
                                         fontWeight = FontWeight.Bold,
                                     )
                                 }
@@ -160,14 +151,14 @@ fun PatientDashboardScreen(
                                 modifier = Modifier
                                     .size(52.dp)
                                     .clip(CircleShape)
-                                    .background(KpiBlueLight)
+                                    .background(AppThemeColors.current.kpiBlueLight)
                                     .clickable { onNavigateToProfile() },
                                 contentAlignment = Alignment.Center,
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Person,
                                     contentDescription = null,
-                                    tint = Primary,
+                                    tint = MaterialTheme.colorScheme.primary,
                                     modifier = Modifier.size(28.dp),
                                 )
                             }
@@ -205,9 +196,9 @@ fun PatientDashboardScreen(
                             value = "${state.activeMedications}",
                             subtitle = "Active",
                             icon = Icons.Outlined.MedicalServices,
-                            iconTint = KpiGreen,
-                            iconBg = KpiGreenLight,
-                            subtitleColor = KpiGreen,
+                            iconTint = AppThemeColors.current.kpiGreen,
+                            iconBg = AppThemeColors.current.kpiGreenLight,
+                            subtitleColor = AppThemeColors.current.kpiGreen,
                             onClick = onNavigateToMedications,
                             modifier = Modifier.weight(1f),
                         )
@@ -216,9 +207,9 @@ fun PatientDashboardScreen(
                             value = "${state.upcomingAppointments}",
                             subtitle = "Upcoming",
                             icon = Icons.Outlined.CalendarMonth,
-                            iconTint = KpiPurple,
-                            iconBg = KpiPurpleLight,
-                            subtitleColor = KpiPurple,
+                            iconTint = AppThemeColors.current.kpiPurple,
+                            iconBg = AppThemeColors.current.kpiPurpleLight,
+                            subtitleColor = AppThemeColors.current.kpiPurple,
                             onClick = onNavigateToAppointments,
                             modifier = Modifier.weight(1f),
                         )
@@ -227,9 +218,9 @@ fun PatientDashboardScreen(
                             value = "${state.labResults}",
                             subtitle = "Available",
                             icon = Icons.Outlined.Description,
-                            iconTint = KpiBlue,
-                            iconBg = KpiBlueLight,
-                            subtitleColor = KpiBlue,
+                            iconTint = AppThemeColors.current.kpiBlue,
+                            iconBg = AppThemeColors.current.kpiBlueLight,
+                            subtitleColor = AppThemeColors.current.kpiBlue,
                             onClick = onNavigateToRecords,
                             modifier = Modifier.weight(1f),
                         )
@@ -238,9 +229,9 @@ fun PatientDashboardScreen(
                             value = "${state.healthScore}",
                             subtitle = state.healthScoreLabel,
                             icon = Icons.Default.CheckCircle,
-                            iconTint = KpiOrange,
-                            iconBg = KpiOrangeLight,
-                            subtitleColor = KpiOrange,
+                            iconTint = AppThemeColors.current.kpiOrange,
+                            iconBg = AppThemeColors.current.kpiOrangeLight,
+                            subtitleColor = AppThemeColors.current.kpiOrange,
                             onClick = { /* health score */ },
                             modifier = Modifier.weight(1f),
                         )
@@ -260,40 +251,40 @@ fun PatientDashboardScreen(
                         QuickActionItem(
                             icon = Icons.Outlined.CalendarMonth,
                             label = "Book\nAppointment",
-                            iconTint = KpiGreen,
-                            iconBg = KpiGreenLight,
+                            iconTint = AppThemeColors.current.kpiGreen,
+                            iconBg = AppThemeColors.current.kpiGreenLight,
                             onClick = onNavigateToAppointments,
                             modifier = Modifier.weight(1f),
                         )
                         QuickActionItem(
                             icon = Icons.Outlined.Science,
                             label = "View\nResults",
-                            iconTint = KpiPurple,
-                            iconBg = KpiPurpleLight,
+                            iconTint = AppThemeColors.current.kpiPurple,
+                            iconBg = AppThemeColors.current.kpiPurpleLight,
                             onClick = onNavigateToRecords,
                             modifier = Modifier.weight(1f),
                         )
                         QuickActionItem(
                             icon = Icons.Outlined.MedicalServices,
                             label = "My\nMedications",
-                            iconTint = Color(0xFFEC4899),
-                            iconBg = Color(0xFFFCE7F3),
+                            iconTint = MaterialTheme.colorScheme.error,
+                            iconBg = MaterialTheme.colorScheme.errorContainer,
                             onClick = onNavigateToMedications,
                             modifier = Modifier.weight(1f),
                         )
                         QuickActionItem(
                             icon = Icons.Outlined.Chat,
                             label = "Message\nDoctor",
-                            iconTint = KpiBlue,
-                            iconBg = KpiBlueLight,
+                            iconTint = AppThemeColors.current.kpiBlue,
+                            iconBg = AppThemeColors.current.kpiBlueLight,
                             onClick = onNavigateToChat,
                             modifier = Modifier.weight(1f),
                         )
                         QuickActionItem(
                             icon = Icons.Outlined.Payment,
                             label = "Billing &\nPayments",
-                            iconTint = KpiOrange,
-                            iconBg = KpiOrangeLight,
+                            iconTint = AppThemeColors.current.kpiOrange,
+                            iconBg = AppThemeColors.current.kpiOrangeLight,
                             onClick = { /* billing */ },
                             modifier = Modifier.weight(1f),
                         )
@@ -363,13 +354,13 @@ private fun NextAppointmentCard(
                 modifier = Modifier
                     .size(48.dp)
                     .clip(RoundedCornerShape(Spacing.md))
-                    .background(KpiBlueLight),
+                    .background(AppThemeColors.current.kpiBlueLight),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
                     imageVector = Icons.Default.CalendarMonth,
                     contentDescription = null,
-                    tint = Primary,
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(24.dp),
                 )
             }
@@ -381,33 +372,33 @@ private fun NextAppointmentCard(
                 Text(
                     text = "Next Appointment",
                     style = MaterialTheme.typography.labelMedium,
-                    color = Primary,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold,
                 )
                 Text(
                     text = appointment.providerName,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF1E293B),
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         imageVector = Icons.Default.CalendarMonth,
                         contentDescription = null,
-                        tint = Color(0xFF6B7280),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.size(14.dp),
                     )
                     Spacer(modifier = Modifier.width(Spacing.xs))
                     Text(
                         text = "${appointment.date} • ${appointment.time}",
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color(0xFF6B7280),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
                 Text(
                     text = appointment.type,
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFF6B7280),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
 
@@ -473,7 +464,7 @@ private fun HealthOverviewCard(
             Text(
                 text = title,
                 style = MaterialTheme.typography.labelSmall,
-                color = Color(0xFF6B7280),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
 
             Text(
@@ -528,7 +519,7 @@ private fun QuickActionItem(
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelSmall,
-                color = Color(0xFF1E293B),
+                color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center,
                 maxLines = 2,
             )
@@ -543,7 +534,7 @@ private fun ProfileCompletionCard(
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(Spacing.base),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFF0FDF4)),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer),
     ) {
         Row(
             modifier = Modifier
@@ -556,13 +547,13 @@ private fun ProfileCompletionCard(
                     text = "Stay on top of your health",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF1E293B),
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
                 Spacer(modifier = Modifier.height(Spacing.xs))
                 Text(
                     text = "Complete your health profile to get personalized care.",
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFF6B7280),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Spacer(modifier = Modifier.height(Spacing.md))
                 TextButton(
@@ -571,7 +562,7 @@ private fun ProfileCompletionCard(
                 ) {
                     Text(
                         text = "Complete Profile",
-                        color = KpiGreen,
+                        color = AppThemeColors.current.kpiGreen,
                         fontWeight = FontWeight.SemiBold,
                     )
                 }
@@ -582,13 +573,13 @@ private fun ProfileCompletionCard(
                 modifier = Modifier
                     .size(80.dp)
                     .clip(RoundedCornerShape(Spacing.md))
-                    .background(KpiGreenLight),
+                    .background(AppThemeColors.current.kpiGreenLight),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
                     imageVector = Icons.Default.CheckCircle,
                     contentDescription = null,
-                    tint = KpiGreen,
+                    tint = AppThemeColors.current.kpiGreen,
                     modifier = Modifier.size(40.dp),
                 )
             }
@@ -603,10 +594,10 @@ private fun RecentRecordItem(
     modifier: Modifier = Modifier,
 ) {
     val (iconBg, iconTint) = when (record.type) {
-        "LAB_RESULTS" -> KpiBlueLight to KpiBlue
-        "PROCEDURE" -> Color(0xFFFCE7F3) to Color(0xFFEC4899)
-        "IMAGING" -> KpiPurpleLight to KpiPurple
-        else -> KpiBlueLight to KpiBlue
+        "LAB_RESULTS" -> AppThemeColors.current.kpiBlueLight to AppThemeColors.current.kpiBlue
+        "PROCEDURE" -> MaterialTheme.colorScheme.errorContainer to MaterialTheme.colorScheme.error
+        "IMAGING" -> AppThemeColors.current.kpiPurpleLight to AppThemeColors.current.kpiPurple
+        else -> AppThemeColors.current.kpiBlueLight to AppThemeColors.current.kpiBlue
     }
 
     Card(
@@ -651,12 +642,12 @@ private fun RecentRecordItem(
                     text = record.title,
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.SemiBold,
-                    color = Color(0xFF1E293B),
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
                     text = record.date,
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFF6B7280),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
 
@@ -672,7 +663,7 @@ private fun RecentRecordItem(
                     Text(
                         text = "View Report",
                         style = MaterialTheme.typography.labelMedium,
-                        color = Primary,
+                        color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Medium,
                     )
                 }
@@ -686,7 +677,7 @@ private fun RecentRecordItem(
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                 contentDescription = null,
-                tint = Color(0xFF9CA3AF),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(20.dp),
             )
         }

@@ -53,16 +53,7 @@ import com.ehealthinformatics.prognocare.designsystem.components.DashboardQuickA
 import com.ehealthinformatics.prognocare.designsystem.components.SectionHeader
 import com.ehealthinformatics.prognocare.designsystem.components.StatusBadge
 import com.ehealthinformatics.prognocare.designsystem.components.StatusType
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiBlue
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiBlueLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiGreen
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiGreenLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiOrange
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiOrangeLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiPurple
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiPurpleLight
-import com.ehealthinformatics.prognocare.designsystem.theme.NotificationBadge
-import com.ehealthinformatics.prognocare.designsystem.theme.Primary
+import com.ehealthinformatics.prognocare.designsystem.theme.AppThemeColors
 import com.ehealthinformatics.prognocare.designsystem.theme.Spacing
 
 @Composable
@@ -81,8 +72,8 @@ fun FinanceDashboardScreen(
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = { /* new bill */ },
-                containerColor = Primary,
-                contentColor = Color.White,
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
                 shape = RoundedCornerShape(Spacing.lg),
                 elevation = FloatingActionButtonDefaults.elevation(
                     defaultElevation = 6.dp,
@@ -119,27 +110,27 @@ fun FinanceDashboardScreen(
                             Text(
                                 text = "${state.greeting},",
                                 style = MaterialTheme.typography.bodyLarge,
-                                color = Color(0xFF6B7280),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                             Text(
                                 text = state.financeName,
                                 style = MaterialTheme.typography.headlineMedium,
                                 fontWeight = FontWeight.Bold,
-                                color = Primary,
+                                color = MaterialTheme.colorScheme.primary,
                             )
                             Spacer(modifier = Modifier.height(Spacing.xs))
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(
                                     imageVector = Icons.Default.CalendarMonth,
                                     contentDescription = null,
-                                    tint = Primary,
+                                    tint = MaterialTheme.colorScheme.primary,
                                     modifier = Modifier.size(16.dp),
                                 )
                                 Spacer(modifier = Modifier.width(Spacing.xs))
                                 Text(
                                     text = state.todayDate,
                                     style = MaterialTheme.typography.bodyMedium,
-                                    color = Color(0xFF6B7280),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
                             }
                         }
@@ -150,7 +141,7 @@ fun FinanceDashboardScreen(
                                     Icon(
                                         imageVector = Icons.Default.Notifications,
                                         contentDescription = "Notifications",
-                                        tint = Color(0xFF6B7280),
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                         modifier = Modifier.size(28.dp),
                                     )
                                 }
@@ -160,13 +151,13 @@ fun FinanceDashboardScreen(
                                             .align(Alignment.TopEnd)
                                             .size(20.dp)
                                             .clip(CircleShape)
-                                            .background(NotificationBadge),
+                                            .background(AppThemeColors.current.notificationBadge),
                                         contentAlignment = Alignment.Center,
                                     ) {
                                         Text(
                                             text = "${state.overdueBills}",
                                             style = MaterialTheme.typography.labelSmall,
-                                            color = Color.White,
+                                            color = MaterialTheme.colorScheme.onPrimary,
                                             fontWeight = FontWeight.Bold,
                                         )
                                     }
@@ -179,14 +170,14 @@ fun FinanceDashboardScreen(
                                 modifier = Modifier
                                     .size(48.dp)
                                     .clip(CircleShape)
-                                    .background(Primary)
+                                    .background(MaterialTheme.colorScheme.primary)
                                     .clickable { onNavigateToProfile() },
                                 contentAlignment = Alignment.Center,
                             ) {
                                 Text(
                                     text = state.financeName.take(1),
                                     style = MaterialTheme.typography.titleLarge,
-                                    color = Color.White,
+                                    color = MaterialTheme.colorScheme.onPrimary,
                                     fontWeight = FontWeight.Bold,
                                 )
                             }
@@ -209,8 +200,8 @@ fun FinanceDashboardScreen(
                             title = "Total Revenue",
                             value = state.totalRevenue,
                             icon = Icons.Outlined.AccountBalance,
-                            iconTint = KpiGreen,
-                            iconBg = KpiGreenLight,
+                            iconTint = AppThemeColors.current.kpiGreen,
+                            iconBg = AppThemeColors.current.kpiGreenLight,
                             onClick = { /* revenue */ },
                             modifier = Modifier.weight(1f),
                         )
@@ -218,8 +209,8 @@ fun FinanceDashboardScreen(
                             title = "Pending Bills",
                             value = "${state.pendingBills}",
                             icon = Icons.Outlined.Description,
-                            iconTint = KpiOrange,
-                            iconBg = KpiOrangeLight,
+                            iconTint = AppThemeColors.current.kpiOrange,
+                            iconBg = AppThemeColors.current.kpiOrangeLight,
                             onClick = onNavigateToBills,
                             modifier = Modifier.weight(1f),
                         )
@@ -232,8 +223,8 @@ fun FinanceDashboardScreen(
                             title = "Completed",
                             value = "${state.completedPayments}",
                             icon = Icons.Default.CheckCircle,
-                            iconTint = KpiBlue,
-                            iconBg = KpiBlueLight,
+                            iconTint = AppThemeColors.current.kpiBlue,
+                            iconBg = AppThemeColors.current.kpiBlueLight,
                             onClick = onNavigateToPayments,
                             modifier = Modifier.weight(1f),
                         )
@@ -241,8 +232,8 @@ fun FinanceDashboardScreen(
                             title = "Overdue",
                             value = "${state.overdueBills}",
                             icon = Icons.Outlined.Warning,
-                            iconTint = Color(0xFFDC2626),
-                            iconBg = Color(0xFFFEE2E2),
+                            iconTint = MaterialTheme.colorScheme.error,
+                            iconBg = MaterialTheme.colorScheme.errorContainer,
                             onClick = { /* overdue */ },
                             modifier = Modifier.weight(1f),
                         )
@@ -262,32 +253,32 @@ fun FinanceDashboardScreen(
                         DashboardQuickAction(
                             icon = Icons.Outlined.Description,
                             label = "Create Bill",
-                            iconTint = KpiBlue,
-                            iconBg = KpiBlueLight,
+                            iconTint = AppThemeColors.current.kpiBlue,
+                            iconBg = AppThemeColors.current.kpiBlueLight,
                             onClick = { /* create bill */ },
                             modifier = Modifier.weight(1f),
                         )
                         DashboardQuickAction(
                             icon = Icons.Outlined.Payment,
                             label = "Record Payment",
-                            iconTint = KpiGreen,
-                            iconBg = KpiGreenLight,
+                            iconTint = AppThemeColors.current.kpiGreen,
+                            iconBg = AppThemeColors.current.kpiGreenLight,
                             onClick = onNavigateToPayments,
                             modifier = Modifier.weight(1f),
                         )
                         DashboardQuickAction(
                             icon = Icons.Default.Person,
                             label = "Patient Search",
-                            iconTint = KpiPurple,
-                            iconBg = KpiPurpleLight,
+                            iconTint = AppThemeColors.current.kpiPurple,
+                            iconBg = AppThemeColors.current.kpiPurpleLight,
                             onClick = onNavigateToPatientSearch,
                             modifier = Modifier.weight(1f),
                         )
                         DashboardQuickAction(
                             icon = Icons.Outlined.Warning,
                             label = "Overdue Bills",
-                            iconTint = Color(0xFFDC2626),
-                            iconBg = Color(0xFFFEE2E2),
+                            iconTint = MaterialTheme.colorScheme.error,
+                            iconBg = MaterialTheme.colorScheme.errorContainer,
                             onClick = { /* overdue bills */ },
                             modifier = Modifier.weight(1f),
                         )
@@ -376,7 +367,7 @@ private fun BillCard(
                     Text(
                         text = bill.billNumber,
                         style = MaterialTheme.typography.labelMedium,
-                        color = Primary,
+                        color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.SemiBold,
                     )
                     Text(
@@ -387,7 +378,7 @@ private fun BillCard(
                     Text(
                         text = "Due: ${bill.dueDate}",
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color(0xFF6B7280),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
                 Column(horizontalAlignment = Alignment.End) {
@@ -395,7 +386,7 @@ private fun BillCard(
                         text = bill.totalDisplay,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1E293B),
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
                     StatusBadge(text = statusText, type = statusType)
                 }
@@ -412,12 +403,12 @@ private fun BillCard(
                 Text(
                     text = "Paid: ${bill.paidDisplay}",
                     style = MaterialTheme.typography.labelSmall,
-                    color = Color(0xFF6B7280),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Text(
                     text = "Balance: ${bill.balanceDisplay}",
                     style = MaterialTheme.typography.labelSmall,
-                    color = if (bill.balanceAmount > 0) KpiOrange else KpiGreen,
+                    color = if (bill.balanceAmount > 0) AppThemeColors.current.kpiOrange else AppThemeColors.current.kpiGreen,
                     fontWeight = FontWeight.SemiBold,
                 )
             }
@@ -429,11 +420,11 @@ private fun BillCard(
                     .height(6.dp)
                     .clip(RoundedCornerShape(3.dp)),
                 color = when {
-                    bill.paymentProgress >= 1f -> KpiGreen
-                    bill.paymentProgress > 0f -> KpiBlue
-                    else -> KpiOrange
+                    bill.paymentProgress >= 1f -> AppThemeColors.current.kpiGreen
+                    bill.paymentProgress > 0f -> AppThemeColors.current.kpiBlue
+                    else -> AppThemeColors.current.kpiOrange
                 },
-                trackColor = Color(0xFFE2E8F0),
+                trackColor = MaterialTheme.colorScheme.outlineVariant,
             )
         }
     }
@@ -460,13 +451,13 @@ private fun PaymentCard(
                 modifier = Modifier
                     .size(44.dp)
                     .clip(CircleShape)
-                    .background(KpiGreenLight),
+                    .background(AppThemeColors.current.kpiGreenLight),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Payment,
                     contentDescription = null,
-                    tint = KpiGreen,
+                    tint = AppThemeColors.current.kpiGreen,
                     modifier = Modifier.size(22.dp),
                 )
             }
@@ -482,12 +473,12 @@ private fun PaymentCard(
                 Text(
                     text = "${payment.paymentMethod.name.replace("_", " ")} · ${payment.paymentDate}",
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFF6B7280),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Text(
                     text = payment.reference,
                     style = MaterialTheme.typography.labelSmall,
-                    color = Color(0xFF9CA3AF),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
 
@@ -496,7 +487,7 @@ private fun PaymentCard(
                     text = payment.amountDisplay,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = KpiGreen,
+                    color = AppThemeColors.current.kpiGreen,
                 )
                 StatusBadge(
                     text = payment.statusDisplay,

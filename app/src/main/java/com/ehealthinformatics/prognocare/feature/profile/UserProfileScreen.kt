@@ -64,15 +64,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ehealthinformatics.prognocare.designsystem.theme.AppearanceMode
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiBlue
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiBlueLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiGreen
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiGreenLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiOrange
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiOrangeLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiPurple
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiPurpleLight
-import com.ehealthinformatics.prognocare.designsystem.theme.NotificationBadge
+import com.ehealthinformatics.prognocare.designsystem.theme.AppThemeColors
 import com.ehealthinformatics.prognocare.designsystem.theme.Primary
 import com.ehealthinformatics.prognocare.designsystem.theme.Spacing
 import com.ehealthinformatics.prognocare.designsystem.theme.ThemeViewModel
@@ -128,7 +120,7 @@ fun UserProfileScreen(
                 ) {
                     Text(
                         text = "Sign Out",
-                        color = Color(0xFFDC2626),
+                        color = MaterialTheme.colorScheme.error,
                         fontWeight = FontWeight.SemiBold,
                     )
                 }
@@ -176,7 +168,7 @@ fun UserProfileScreen(
                     .padding(innerPadding),
                 contentAlignment = Alignment.Center,
             ) {
-                CircularProgressIndicator(color = Primary)
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             }
         } else {
             val profile = state.profile ?: return@Scaffold
@@ -201,7 +193,7 @@ fun UserProfileScreen(
                             modifier = Modifier
                                 .size(100.dp)
                                 .clip(CircleShape)
-                                .background(Primary),
+                                .background(MaterialTheme.colorScheme.primary),
                             contentAlignment = Alignment.Center,
                         ) {
                             Text(
@@ -219,7 +211,7 @@ fun UserProfileScreen(
                             text = profile.name,
                             style = MaterialTheme.typography.headlineSmall,
                             fontWeight = FontWeight.Bold,
-                            color = Color(0xFF1E293B),
+                            color = MaterialTheme.colorScheme.onSurface,
                         )
 
                         Spacer(modifier = Modifier.height(Spacing.xs))
@@ -228,13 +220,13 @@ fun UserProfileScreen(
                         Box(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(20.dp))
-                                .background(KpiBlueLight)
+                                .background(AppThemeColors.current.kpiBlueLight)
                                 .padding(horizontal = Spacing.md, vertical = Spacing.xs),
                         ) {
                             Text(
                                 text = profile.role.displayName,
                                 style = MaterialTheme.typography.labelMedium,
-                                color = KpiBlue,
+                                color = AppThemeColors.current.kpiBlue,
                                 fontWeight = FontWeight.SemiBold,
                             )
                         }
@@ -245,12 +237,12 @@ fun UserProfileScreen(
                         Text(
                             text = profile.department,
                             style = MaterialTheme.typography.bodyMedium,
-                            color = Color(0xFF6B7280),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                         Text(
                             text = profile.facility,
                             style = MaterialTheme.typography.bodySmall,
-                            color = Color(0xFF9CA3AF),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
                 }
@@ -274,36 +266,36 @@ fun UserProfileScreen(
                                 text = "Contact Information",
                                 style = MaterialTheme.typography.titleSmall,
                                 fontWeight = FontWeight.SemiBold,
-                                color = Color(0xFF1E293B),
+                                color = MaterialTheme.colorScheme.onSurface,
                             )
                             Spacer(modifier = Modifier.height(Spacing.md))
 
                             ProfileInfoRow(
                                 icon = Icons.Outlined.Email,
-                                iconTint = KpiBlue,
-                                iconBg = KpiBlueLight,
+                                iconTint = AppThemeColors.current.kpiBlue,
+                                iconBg = AppThemeColors.current.kpiBlueLight,
                                 label = "Email",
                                 value = profile.email,
                             )
                             HorizontalDivider(
                                 modifier = Modifier.padding(vertical = Spacing.sm),
-                                color = Color(0xFFF1F5F9),
+                                color = MaterialTheme.colorScheme.surfaceVariant,
                             )
                             ProfileInfoRow(
                                 icon = Icons.Outlined.Phone,
-                                iconTint = KpiGreen,
-                                iconBg = KpiGreenLight,
+                                iconTint = AppThemeColors.current.kpiGreen,
+                                iconBg = AppThemeColors.current.kpiGreenLight,
                                 label = "Phone",
                                 value = profile.phone,
                             )
                             HorizontalDivider(
                                 modifier = Modifier.padding(vertical = Spacing.sm),
-                                color = Color(0xFFF1F5F9),
+                                color = MaterialTheme.colorScheme.surfaceVariant,
                             )
                             ProfileInfoRow(
                                 icon = Icons.Outlined.Business,
-                                iconTint = KpiPurple,
-                                iconBg = KpiPurpleLight,
+                                iconTint = AppThemeColors.current.kpiPurple,
+                                iconBg = AppThemeColors.current.kpiPurpleLight,
                                 label = "Facility",
                                 value = profile.facility,
                             )
@@ -330,43 +322,43 @@ fun UserProfileScreen(
                                 text = "Employment Details",
                                 style = MaterialTheme.typography.titleSmall,
                                 fontWeight = FontWeight.SemiBold,
-                                color = Color(0xFF1E293B),
+                                color = MaterialTheme.colorScheme.onSurface,
                             )
                             Spacer(modifier = Modifier.height(Spacing.md))
 
                             if (profile.employeeId != null) {
                                 ProfileInfoRow(
                                     icon = Icons.Filled.Badge,
-                                    iconTint = KpiOrange,
-                                    iconBg = KpiOrangeLight,
+                                    iconTint = AppThemeColors.current.kpiOrange,
+                                    iconBg = AppThemeColors.current.kpiOrangeLight,
                                     label = "Employee ID",
                                     value = profile.employeeId,
                                 )
                                 HorizontalDivider(
                                     modifier = Modifier.padding(vertical = Spacing.sm),
-                                    color = Color(0xFFF1F5F9),
+                                    color = MaterialTheme.colorScheme.surfaceVariant,
                                 )
                             }
 
                             if (profile.joinDate != null) {
                                 ProfileInfoRow(
                                     icon = Icons.Filled.DateRange,
-                                    iconTint = KpiBlue,
-                                    iconBg = KpiBlueLight,
+                                    iconTint = AppThemeColors.current.kpiBlue,
+                                    iconBg = AppThemeColors.current.kpiBlueLight,
                                     label = "Join Date",
                                     value = profile.joinDate,
                                 )
                                 HorizontalDivider(
                                     modifier = Modifier.padding(vertical = Spacing.sm),
-                                    color = Color(0xFFF1F5F9),
+                                    color = MaterialTheme.colorScheme.surfaceVariant,
                                 )
                             }
 
                             if (profile.licenseNumber != null) {
                                 ProfileInfoRow(
                                     icon = Icons.Filled.Security,
-                                    iconTint = KpiPurple,
-                                    iconBg = KpiPurpleLight,
+                                    iconTint = AppThemeColors.current.kpiPurple,
+                                    iconBg = AppThemeColors.current.kpiPurpleLight,
                                     label = "License Number",
                                     value = profile.licenseNumber,
                                 )
@@ -394,7 +386,7 @@ fun UserProfileScreen(
                                 text = "Settings",
                                 style = MaterialTheme.typography.titleSmall,
                                 fontWeight = FontWeight.SemiBold,
-                                color = Color(0xFF1E293B),
+                                color = MaterialTheme.colorScheme.onSurface,
                             )
                             Spacer(modifier = Modifier.height(Spacing.md))
 
@@ -409,13 +401,13 @@ fun UserProfileScreen(
                                     modifier = Modifier
                                         .size(36.dp)
                                         .clip(CircleShape)
-                                        .background(KpiBlueLight),
+                                        .background(AppThemeColors.current.kpiBlueLight),
                                     contentAlignment = Alignment.Center,
                                 ) {
                                     Icon(
                                         imageVector = Icons.Filled.Notifications,
                                         contentDescription = null,
-                                        tint = KpiBlue,
+                                        tint = AppThemeColors.current.kpiBlue,
                                         modifier = Modifier.size(20.dp),
                                     )
                                 }
@@ -429,21 +421,21 @@ fun UserProfileScreen(
                                     Text(
                                         text = "Push & email notifications",
                                         style = MaterialTheme.typography.bodySmall,
-                                        color = Color(0xFF9CA3AF),
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     )
                                 }
                                 Switch(
                                     checked = notificationsEnabled,
                                     onCheckedChange = { notificationsEnabled = it },
                                     colors = SwitchDefaults.colors(
-                                        checkedTrackColor = KpiBlue,
+                                        checkedTrackColor = AppThemeColors.current.kpiBlue,
                                     ),
                                 )
                             }
 
                             HorizontalDivider(
                                 modifier = Modifier.padding(vertical = Spacing.sm),
-                                color = Color(0xFFF1F5F9),
+                                color = MaterialTheme.colorScheme.surfaceVariant,
                             )
 
                             // Theme / Appearance
@@ -457,13 +449,13 @@ fun UserProfileScreen(
                                     modifier = Modifier
                                         .size(36.dp)
                                         .clip(CircleShape)
-                                        .background(KpiPurpleLight),
+                                        .background(AppThemeColors.current.kpiPurpleLight),
                                     contentAlignment = Alignment.Center,
                                 ) {
                                     Icon(
                                         imageVector = Icons.Filled.DarkMode,
                                         contentDescription = null,
-                                        tint = KpiPurple,
+                                        tint = AppThemeColors.current.kpiPurple,
                                         modifier = Modifier.size(20.dp),
                                     )
                                 }
@@ -477,20 +469,20 @@ fun UserProfileScreen(
                                     Text(
                                         text = "${themeSettings.appearanceMode.displayName} · ${themeSettings.colorTheme.displayName}",
                                         style = MaterialTheme.typography.bodySmall,
-                                        color = Color(0xFF9CA3AF),
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     )
                                 }
                                 Icon(
                                     imageVector = Icons.Filled.ChevronRight,
                                     contentDescription = null,
-                                    tint = Color(0xFF9CA3AF),
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                     modifier = Modifier.size(24.dp),
                                 )
                             }
 
                             HorizontalDivider(
                                 modifier = Modifier.padding(vertical = Spacing.sm),
-                                color = Color(0xFFF1F5F9),
+                                color = MaterialTheme.colorScheme.surfaceVariant,
                             )
 
                             // Help & Support
@@ -504,13 +496,13 @@ fun UserProfileScreen(
                                     modifier = Modifier
                                         .size(36.dp)
                                         .clip(CircleShape)
-                                        .background(KpiGreenLight),
+                                        .background(AppThemeColors.current.kpiGreenLight),
                                     contentAlignment = Alignment.Center,
                                 ) {
                                     Icon(
                                         imageVector = Icons.AutoMirrored.Outlined.Help,
                                         contentDescription = null,
-                                        tint = KpiGreen,
+                                        tint = AppThemeColors.current.kpiGreen,
                                         modifier = Modifier.size(20.dp),
                                     )
                                 }
@@ -524,13 +516,13 @@ fun UserProfileScreen(
                                     Text(
                                         text = "FAQ, contact support",
                                         style = MaterialTheme.typography.bodySmall,
-                                        color = Color(0xFF9CA3AF),
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     )
                                 }
                                 Icon(
                                     imageVector = Icons.Filled.ChevronRight,
                                     contentDescription = null,
-                                    tint = Color(0xFF9CA3AF),
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                     modifier = Modifier.size(24.dp),
                                 )
                             }
@@ -547,7 +539,7 @@ fun UserProfileScreen(
                             .clickable { showSignOutDialog = true },
                         shape = RoundedCornerShape(Spacing.base),
                         colors = CardDefaults.cardColors(
-                            containerColor = Color(0xFFFEE2E2),
+                            containerColor = MaterialTheme.colorScheme.errorContainer,
                         ),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                     ) {
@@ -567,14 +559,14 @@ fun UserProfileScreen(
                                     Icon(
                                         imageVector = Icons.AutoMirrored.Filled.Logout,
                                         contentDescription = null,
-                                        tint = Color(0xFFDC2626),
+                                        tint = MaterialTheme.colorScheme.error,
                                         modifier = Modifier.size(20.dp),
                                     )
                                     Spacer(modifier = Modifier.width(Spacing.sm))
                                     Text(
                                         text = "Sign Out",
                                         style = MaterialTheme.typography.bodyLarge,
-                                        color = Color(0xFFDC2626),
+                                        color = MaterialTheme.colorScheme.error,
                                         fontWeight = FontWeight.SemiBold,
                                     )
                                 }
@@ -587,14 +579,14 @@ fun UserProfileScreen(
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     CircularProgressIndicator(
                                         modifier = Modifier.size(20.dp),
-                                        color = Color(0xFFDC2626),
+                                        color = MaterialTheme.colorScheme.error,
                                         strokeWidth = 2.dp,
                                     )
                                     Spacer(modifier = Modifier.width(Spacing.sm))
                                     Text(
                                         text = "Signing out...",
                                         style = MaterialTheme.typography.bodyLarge,
-                                        color = Color(0xFFDC2626),
+                                        color = MaterialTheme.colorScheme.error,
                                         fontWeight = FontWeight.SemiBold,
                                     )
                                 }
@@ -608,7 +600,7 @@ fun UserProfileScreen(
                     Text(
                         text = "PrognoCare v1.0.0",
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color(0xFF9CA3AF),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = Spacing.lg),
@@ -653,12 +645,12 @@ private fun ProfileInfoRow(
             Text(
                 text = label,
                 style = MaterialTheme.typography.bodySmall,
-                color = Color(0xFF9CA3AF),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Text(
                 text = value,
                 style = MaterialTheme.typography.bodyMedium,
-                color = Color(0xFF1E293B),
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Medium,
             )
         }

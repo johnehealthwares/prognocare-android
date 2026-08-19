@@ -42,7 +42,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -52,16 +51,7 @@ import com.ehealthinformatics.prognocare.designsystem.components.DashboardKpiCar
 import com.ehealthinformatics.prognocare.designsystem.components.DashboardQuickAction
 import com.ehealthinformatics.prognocare.designsystem.components.SectionHeader
 import com.ehealthinformatics.prognocare.designsystem.components.StatusType
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiBlue
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiBlueLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiGreen
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiGreenLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiOrange
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiOrangeLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiPurple
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiPurpleLight
-import com.ehealthinformatics.prognocare.designsystem.theme.NotificationBadge
-import com.ehealthinformatics.prognocare.designsystem.theme.Primary
+import com.ehealthinformatics.prognocare.designsystem.theme.AppThemeColors
 import com.ehealthinformatics.prognocare.designsystem.theme.Spacing
 
 @Composable
@@ -79,8 +69,8 @@ fun DoctorDashboardScreen(
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = { /* new encounter */ },
-                containerColor = Primary,
-                contentColor = Color.White,
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
                 shape = RoundedCornerShape(Spacing.lg),
                 elevation = FloatingActionButtonDefaults.elevation(
                     defaultElevation = 6.dp,
@@ -117,27 +107,27 @@ fun DoctorDashboardScreen(
                             Text(
                                 text = "${state.greeting},",
                                 style = MaterialTheme.typography.bodyLarge,
-                                color = Color(0xFF6B7280),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                             Text(
                                 text = state.doctorName,
                                 style = MaterialTheme.typography.headlineMedium,
                                 fontWeight = FontWeight.Bold,
-                                color = Primary,
+                                color = MaterialTheme.colorScheme.primary,
                             )
                             Spacer(modifier = Modifier.height(Spacing.xs))
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(
                                     imageVector = Icons.Default.CalendarMonth,
                                     contentDescription = null,
-                                    tint = Primary,
+                                    tint = MaterialTheme.colorScheme.primary,
                                     modifier = Modifier.size(16.dp),
                                 )
                                 Spacer(modifier = Modifier.width(Spacing.xs))
                                 Text(
                                     text = state.todayDate,
                                     style = MaterialTheme.typography.bodyMedium,
-                                    color = Color(0xFF6B7280),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
                             }
                         }
@@ -149,7 +139,7 @@ fun DoctorDashboardScreen(
                                     Icon(
                                         imageVector = Icons.Default.Notifications,
                                         contentDescription = "Notifications",
-                                        tint = Color(0xFF6B7280),
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                         modifier = Modifier.size(28.dp),
                                     )
                                 }
@@ -159,13 +149,13 @@ fun DoctorDashboardScreen(
                                             .align(Alignment.TopEnd)
                                             .size(20.dp)
                                             .clip(CircleShape)
-                                            .background(NotificationBadge),
+                                            .background(AppThemeColors.current.notificationBadge),
                                         contentAlignment = Alignment.Center,
                                     ) {
                                         Text(
                                             text = "${state.urgentCount}",
                                             style = MaterialTheme.typography.labelSmall,
-                                            color = Color.White,
+                                            color = AppThemeColors.current.onNotificationBadge,
                                             fontWeight = FontWeight.Bold,
                                         )
                                     }
@@ -179,14 +169,14 @@ fun DoctorDashboardScreen(
                                 modifier = Modifier
                                     .size(48.dp)
                                     .clip(CircleShape)
-                                    .background(Primary)
+                                    .background(MaterialTheme.colorScheme.primary)
                                     .clickable { onNavigateToProfile() },
                                 contentAlignment = Alignment.Center,
                             ) {
                                 Text(
                                     text = state.doctorName.take(1),
                                     style = MaterialTheme.typography.titleLarge,
-                                    color = Color.White,
+                                    color = MaterialTheme.colorScheme.onPrimary,
                                     fontWeight = FontWeight.Bold,
                                 )
                             }
@@ -209,8 +199,8 @@ fun DoctorDashboardScreen(
                             title = "Today's Appts",
                             value = "${state.todayAppointments}",
                             icon = Icons.Default.CalendarMonth,
-                            iconTint = KpiBlue,
-                            iconBg = KpiBlueLight,
+                            iconTint = AppThemeColors.current.kpiBlue,
+                            iconBg = AppThemeColors.current.kpiBlueLight,
                             onClick = onNavigateToAppointments,
                             modifier = Modifier.weight(1f),
                         )
@@ -218,8 +208,8 @@ fun DoctorDashboardScreen(
                             title = "Active",
                             value = "${state.activeEncounters}",
                             icon = Icons.Default.MedicalServices,
-                            iconTint = KpiGreen,
-                            iconBg = KpiGreenLight,
+                            iconTint = AppThemeColors.current.kpiGreen,
+                            iconBg = AppThemeColors.current.kpiGreenLight,
                             onClick = { /* active encounters */ },
                             modifier = Modifier.weight(1f),
                         )
@@ -232,8 +222,8 @@ fun DoctorDashboardScreen(
                             title = "Total Patients",
                             value = "${state.totalPatients}",
                             icon = Icons.Default.Person,
-                            iconTint = KpiPurple,
-                            iconBg = KpiPurpleLight,
+                            iconTint = AppThemeColors.current.kpiPurple,
+                            iconBg = AppThemeColors.current.kpiPurpleLight,
                             onClick = onNavigateToPatients,
                             modifier = Modifier.weight(1f),
                         )
@@ -241,8 +231,8 @@ fun DoctorDashboardScreen(
                             title = "Completed",
                             value = "${state.completedToday}",
                             icon = Icons.Default.CheckCircle,
-                            iconTint = KpiOrange,
-                            iconBg = KpiOrangeLight,
+                            iconTint = AppThemeColors.current.kpiOrange,
+                            iconBg = AppThemeColors.current.kpiOrangeLight,
                             onClick = { /* completed */ },
                             modifier = Modifier.weight(1f),
                         )
@@ -262,32 +252,32 @@ fun DoctorDashboardScreen(
                         DashboardQuickAction(
                             icon = Icons.Outlined.EditNote,
                             label = "Clinical Note",
-                            iconTint = KpiBlue,
-                            iconBg = KpiBlueLight,
+                            iconTint = AppThemeColors.current.kpiBlue,
+                            iconBg = AppThemeColors.current.kpiBlueLight,
                             onClick = { /* new encounter */ },
                             modifier = Modifier.weight(1f),
                         )
                         DashboardQuickAction(
                             icon = Icons.Outlined.Receipt,
                             label = "New Request",
-                            iconTint = KpiPurple,
-                            iconBg = KpiPurpleLight,
+                            iconTint = AppThemeColors.current.kpiPurple,
+                            iconBg = AppThemeColors.current.kpiPurpleLight,
                             onClick = { /* new request */ },
                             modifier = Modifier.weight(1f),
                         )
                         DashboardQuickAction(
                             icon = Icons.Outlined.People,
                             label = "View Patients",
-                            iconTint = KpiGreen,
-                            iconBg = KpiGreenLight,
+                            iconTint = AppThemeColors.current.kpiGreen,
+                            iconBg = AppThemeColors.current.kpiGreenLight,
                             onClick = onNavigateToPatients,
                             modifier = Modifier.weight(1f),
                         )
                         DashboardQuickAction(
                             icon = Icons.Outlined.CalendarMonth,
                             label = "Schedule",
-                            iconTint = KpiOrange,
-                            iconBg = KpiOrangeLight,
+                            iconTint = AppThemeColors.current.kpiOrange,
+                            iconBg = AppThemeColors.current.kpiOrangeLight,
                             onClick = onNavigateToAppointments,
                             modifier = Modifier.weight(1f),
                         )

@@ -54,16 +54,7 @@ import com.ehealthinformatics.prognocare.designsystem.components.DashboardQuickA
 import com.ehealthinformatics.prognocare.designsystem.components.SectionHeader
 import com.ehealthinformatics.prognocare.designsystem.components.StatusBadge
 import com.ehealthinformatics.prognocare.designsystem.components.StatusType
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiBlue
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiBlueLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiGreen
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiGreenLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiOrange
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiOrangeLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiPurple
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiPurpleLight
-import com.ehealthinformatics.prognocare.designsystem.theme.NotificationBadge
-import com.ehealthinformatics.prognocare.designsystem.theme.Primary
+import com.ehealthinformatics.prognocare.designsystem.theme.AppThemeColors
 import com.ehealthinformatics.prognocare.designsystem.theme.Spacing
 
 @Composable
@@ -81,8 +72,8 @@ fun TherapistDashboardScreen(
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = { /* new session */ },
-                containerColor = Primary,
-                contentColor = Color.White,
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
                 shape = RoundedCornerShape(Spacing.lg),
                 elevation = FloatingActionButtonDefaults.elevation(
                     defaultElevation = 6.dp,
@@ -119,34 +110,34 @@ fun TherapistDashboardScreen(
                             Text(
                                 text = "${state.greeting},",
                                 style = MaterialTheme.typography.bodyLarge,
-                                color = Color(0xFF6B7280),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                             Text(
                                 text = state.therapistName,
                                 style = MaterialTheme.typography.headlineMedium,
                                 fontWeight = FontWeight.Bold,
-                                color = Primary,
+                                color = MaterialTheme.colorScheme.primary,
                             )
                             Spacer(modifier = Modifier.height(Spacing.xs))
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(
                                     imageVector = Icons.Default.CalendarMonth,
                                     contentDescription = null,
-                                    tint = Primary,
+                                    tint = MaterialTheme.colorScheme.primary,
                                     modifier = Modifier.size(16.dp),
                                 )
                                 Spacer(modifier = Modifier.width(Spacing.xs))
                                 Text(
                                     text = state.todayDate,
                                     style = MaterialTheme.typography.bodyMedium,
-                                    color = Color(0xFF6B7280),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
                             }
                             Spacer(modifier = Modifier.height(Spacing.xxs))
                             Text(
                                 text = state.specialty,
                                 style = MaterialTheme.typography.labelLarge,
-                                color = Primary.copy(alpha = 0.7f),
+                                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f),
                                 fontWeight = FontWeight.Medium,
                             )
                         }
@@ -158,7 +149,7 @@ fun TherapistDashboardScreen(
                                     Icon(
                                         imageVector = Icons.Default.Notifications,
                                         contentDescription = "Notifications",
-                                        tint = Color(0xFF6B7280),
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                         modifier = Modifier.size(28.dp),
                                     )
                                 }
@@ -168,13 +159,13 @@ fun TherapistDashboardScreen(
                                             .align(Alignment.TopEnd)
                                             .size(20.dp)
                                             .clip(CircleShape)
-                                            .background(NotificationBadge),
+                                            .background(AppThemeColors.current.notificationBadge),
                                         contentAlignment = Alignment.Center,
                                     ) {
                                         Text(
                                             text = "${state.pendingAssessments}",
                                             style = MaterialTheme.typography.labelSmall,
-                                            color = Color.White,
+                                            color = MaterialTheme.colorScheme.onPrimary,
                                             fontWeight = FontWeight.Bold,
                                         )
                                     }
@@ -188,14 +179,14 @@ fun TherapistDashboardScreen(
                                 modifier = Modifier
                                     .size(48.dp)
                                     .clip(CircleShape)
-                                    .background(Primary)
+                                    .background(MaterialTheme.colorScheme.primary)
                                     .clickable { onNavigateToProfile() },
                                 contentAlignment = Alignment.Center,
                             ) {
                                 Text(
                                     text = state.therapistName.take(1),
                                     style = MaterialTheme.typography.titleLarge,
-                                    color = Color.White,
+                                    color = MaterialTheme.colorScheme.onPrimary,
                                     fontWeight = FontWeight.Bold,
                                 )
                             }
@@ -218,8 +209,8 @@ fun TherapistDashboardScreen(
                             title = "Today's Sessions",
                             value = "${state.todaySessions}",
                             icon = Icons.Outlined.EventAvailable,
-                            iconTint = KpiBlue,
-                            iconBg = KpiBlueLight,
+                            iconTint = AppThemeColors.current.kpiBlue,
+                            iconBg = AppThemeColors.current.kpiBlueLight,
                             onClick = onNavigateToSessions,
                             modifier = Modifier.weight(1f),
                         )
@@ -227,8 +218,8 @@ fun TherapistDashboardScreen(
                             title = "Active Plans",
                             value = "${state.activePlans}",
                             icon = Icons.Outlined.FitnessCenter,
-                            iconTint = KpiPurple,
-                            iconBg = KpiPurpleLight,
+                            iconTint = AppThemeColors.current.kpiPurple,
+                            iconBg = AppThemeColors.current.kpiPurpleLight,
                             onClick = { /* active plans */ },
                             modifier = Modifier.weight(1f),
                         )
@@ -241,8 +232,8 @@ fun TherapistDashboardScreen(
                             title = "Assessments Due",
                             value = "${state.pendingAssessments}",
                             icon = Icons.Outlined.Assessment,
-                            iconTint = KpiOrange,
-                            iconBg = KpiOrangeLight,
+                            iconTint = AppThemeColors.current.kpiOrange,
+                            iconBg = AppThemeColors.current.kpiOrangeLight,
                             onClick = { /* assessments */ },
                             modifier = Modifier.weight(1f),
                         )
@@ -250,8 +241,8 @@ fun TherapistDashboardScreen(
                             title = "Completed",
                             value = "${state.completedToday}",
                             icon = Icons.Default.CheckCircle,
-                            iconTint = KpiGreen,
-                            iconBg = KpiGreenLight,
+                            iconTint = AppThemeColors.current.kpiGreen,
+                            iconBg = AppThemeColors.current.kpiGreenLight,
                             onClick = { /* completed */ },
                             modifier = Modifier.weight(1f),
                         )
@@ -269,12 +260,12 @@ fun TherapistDashboardScreen(
                         Text(
                             text = "Daily Progress",
                             style = MaterialTheme.typography.labelMedium,
-                            color = Color(0xFF6B7280),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                         Text(
                             text = "${state.completedToday}/$totalTasks sessions",
                             style = MaterialTheme.typography.labelSmall,
-                            color = Primary,
+                            color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.SemiBold,
                         )
                     }
@@ -285,8 +276,8 @@ fun TherapistDashboardScreen(
                             .fillMaxWidth()
                             .height(8.dp)
                             .clip(RoundedCornerShape(4.dp)),
-                        color = KpiGreen,
-                        trackColor = KpiGreenLight,
+                        color = AppThemeColors.current.kpiGreen,
+                        trackColor = AppThemeColors.current.kpiGreenLight,
                     )
                 }
             }
@@ -303,32 +294,32 @@ fun TherapistDashboardScreen(
                         DashboardQuickAction(
                             icon = Icons.Outlined.EventAvailable,
                             label = "Start Session",
-                            iconTint = KpiBlue,
-                            iconBg = KpiBlueLight,
+                            iconTint = AppThemeColors.current.kpiBlue,
+                            iconBg = AppThemeColors.current.kpiBlueLight,
                             onClick = onNavigateToSessions,
                             modifier = Modifier.weight(1f),
                         )
                         DashboardQuickAction(
                             icon = Icons.Outlined.Assessment,
                             label = "Assessment",
-                            iconTint = KpiOrange,
-                            iconBg = KpiOrangeLight,
+                            iconTint = AppThemeColors.current.kpiOrange,
+                            iconBg = AppThemeColors.current.kpiOrangeLight,
                             onClick = { /* assessment */ },
                             modifier = Modifier.weight(1f),
                         )
                         DashboardQuickAction(
                             icon = Icons.Outlined.FitnessCenter,
                             label = "Therapy Plans",
-                            iconTint = KpiPurple,
-                            iconBg = KpiPurpleLight,
+                            iconTint = AppThemeColors.current.kpiPurple,
+                            iconBg = AppThemeColors.current.kpiPurpleLight,
                             onClick = { /* therapy plans */ },
                             modifier = Modifier.weight(1f),
                         )
                         DashboardQuickAction(
                             icon = Icons.Default.Person,
                             label = "Patients",
-                            iconTint = KpiGreen,
-                            iconBg = KpiGreenLight,
+                            iconTint = AppThemeColors.current.kpiGreen,
+                            iconBg = AppThemeColors.current.kpiGreenLight,
                             onClick = onNavigateToPatients,
                             modifier = Modifier.weight(1f),
                         )
@@ -443,12 +434,12 @@ private fun SessionCard(
                     text = session.scheduledTime.split(" ")[0],
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
-                    color = Primary,
+                    color = MaterialTheme.colorScheme.primary,
                 )
                 Text(
                     text = session.scheduledTime.split(" ").getOrElse(1) { "" },
                     style = MaterialTheme.typography.labelSmall,
-                    color = Color(0xFF6B7280),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
 
@@ -459,13 +450,13 @@ private fun SessionCard(
                 modifier = Modifier
                     .size(44.dp)
                     .clip(CircleShape)
-                    .background(KpiBlueLight),
+                    .background(AppThemeColors.current.kpiBlueLight),
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
                     text = session.patientName.take(1),
                     style = MaterialTheme.typography.titleMedium,
-                    color = Primary,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold,
                 )
             }
@@ -488,13 +479,13 @@ private fun SessionCard(
                 Text(
                     text = "${session.sessionType.name.replace("_", " ").lowercase().replaceFirstChar { it.uppercase() }} · ${session.duration}",
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFF6B7280),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 if (session.notes != null) {
                     Text(
                         text = session.notes,
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color(0xFF6B7280),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,
                     )
                 }
@@ -539,7 +530,7 @@ private fun TherapyPlanCard(
                     Text(
                         text = "${plan.patientName} · ${plan.diagnosis}",
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color(0xFF6B7280),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
                 StatusBadge(
@@ -564,12 +555,12 @@ private fun TherapyPlanCard(
                 Text(
                     text = "Progress",
                     style = MaterialTheme.typography.labelMedium,
-                    color = Color(0xFF6B7280),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Text(
                     text = "${plan.completedSessions}/${plan.totalSessions} sessions (${plan.progressPercent}%)",
                     style = MaterialTheme.typography.labelSmall,
-                    color = Primary,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold,
                 )
             }
@@ -581,11 +572,11 @@ private fun TherapyPlanCard(
                     .height(6.dp)
                     .clip(RoundedCornerShape(3.dp)),
                 color = when {
-                    plan.progressPercent >= 75 -> KpiGreen
-                    plan.progressPercent >= 50 -> KpiBlue
-                    else -> KpiOrange
+                    plan.progressPercent >= 75 -> AppThemeColors.current.kpiGreen
+                    plan.progressPercent >= 50 -> AppThemeColors.current.kpiBlue
+                    else -> AppThemeColors.current.kpiOrange
                 },
-                trackColor = Color(0xFFE2E8F0),
+                trackColor = MaterialTheme.colorScheme.outlineVariant,
             )
 
             // Goals
@@ -594,7 +585,7 @@ private fun TherapyPlanCard(
                 Text(
                     text = "Goals",
                     style = MaterialTheme.typography.labelMedium,
-                    color = Color(0xFF6B7280),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 plan.goals.take(2).forEach { goal ->
                     Row(
@@ -604,14 +595,14 @@ private fun TherapyPlanCard(
                         Icon(
                             imageVector = Icons.Default.CheckCircle,
                             contentDescription = null,
-                            tint = KpiGreen,
+                            tint = AppThemeColors.current.kpiGreen,
                             modifier = Modifier.size(14.dp),
                         )
                         Spacer(modifier = Modifier.width(Spacing.xs))
                         Text(
                             text = goal,
                             style = MaterialTheme.typography.bodySmall,
-                            color = Color(0xFF475569),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
                 }
@@ -627,9 +618,9 @@ private fun AssessmentCard(
     modifier: Modifier = Modifier,
 ) {
     val trendColor = when (assessment.trend) {
-        AssessmentTrend.IMPROVING -> KpiGreen
-        AssessmentTrend.STABLE -> KpiBlue
-        AssessmentTrend.DECLINING -> Color(0xFFDC2626)
+        AssessmentTrend.IMPROVING -> AppThemeColors.current.kpiGreen
+        AssessmentTrend.STABLE -> AppThemeColors.current.kpiBlue
+        AssessmentTrend.DECLINING -> MaterialTheme.colorScheme.error
     }
 
     Card(
@@ -664,7 +655,7 @@ private fun AssessmentCard(
                     Text(
                         text = "/${assessment.maxScore}",
                         style = MaterialTheme.typography.labelSmall,
-                        color = Color(0xFF6B7280),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             }
@@ -681,12 +672,12 @@ private fun AssessmentCard(
                 Text(
                     text = "${assessment.assessmentType} · ${assessment.date}",
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFF6B7280),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Text(
                     text = assessment.notes,
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFF6B7280),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
                 )
             }

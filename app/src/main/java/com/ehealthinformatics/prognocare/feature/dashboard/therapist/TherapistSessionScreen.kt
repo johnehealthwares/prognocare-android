@@ -49,11 +49,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ehealthinformatics.prognocare.designsystem.components.EmptyState
 import com.ehealthinformatics.prognocare.designsystem.components.StatusBadge
 import com.ehealthinformatics.prognocare.designsystem.components.StatusType
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiBlue
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiBlueLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiGreen
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiOrange
-import com.ehealthinformatics.prognocare.designsystem.theme.Primary
+import com.ehealthinformatics.prognocare.designsystem.theme.AppThemeColors
 import com.ehealthinformatics.prognocare.designsystem.theme.Spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -95,7 +91,7 @@ fun TherapistSessionScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { /* new session */ },
-                containerColor = Primary,
+                containerColor = MaterialTheme.colorScheme.primary,
             ) {
                 Icon(Icons.Default.Add, contentDescription = "New Session")
             }
@@ -203,12 +199,12 @@ private fun SessionDetailCard(
                     text = session.scheduledTime.split(" ")[0],
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
-                    color = Primary,
+                    color = MaterialTheme.colorScheme.primary,
                 )
                 Text(
                     text = session.scheduledTime.split(" ").getOrElse(1) { "" },
                     style = MaterialTheme.typography.labelSmall,
-                    color = Color(0xFF6B7280),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
 
@@ -219,13 +215,13 @@ private fun SessionDetailCard(
                 modifier = Modifier
                     .size(44.dp)
                     .clip(CircleShape)
-                    .background(KpiBlueLight),
+                    .background(AppThemeColors.current.kpiBlueLight),
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
                     text = session.patientName.take(1),
                     style = MaterialTheme.typography.titleMedium,
-                    color = Primary,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold,
                 )
             }
@@ -248,18 +244,18 @@ private fun SessionDetailCard(
                 Text(
                     text = "${session.sessionType.name.replace("_", " ").lowercase().replaceFirstChar { it.uppercase() }} · ${session.duration}",
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFF6B7280),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Text(
                     text = session.location,
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFF6B7280),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 if (session.notes != null) {
                     Text(
                         text = session.notes,
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color(0xFF6B7280),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,
                     )
                 }
@@ -273,7 +269,7 @@ private fun SessionDetailCard(
                     Text(
                         text = "Start",
                         style = MaterialTheme.typography.labelMedium,
-                        color = KpiGreen,
+                        color = AppThemeColors.current.kpiGreen,
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier.clickable { /* start session */ },
                     )

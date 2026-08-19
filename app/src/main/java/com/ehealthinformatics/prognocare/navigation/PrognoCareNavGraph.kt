@@ -57,6 +57,8 @@ import com.ehealthinformatics.prognocare.feature.dashboard.therapist.TherapistDa
 import com.ehealthinformatics.prognocare.feature.dashboard.therapist.TherapistSessionScreen
 import com.ehealthinformatics.prognocare.feature.dashboard.therapist.TherapistPatientListScreen
 import com.ehealthinformatics.prognocare.feature.dashboard.finance.FinanceDashboardScreen
+import com.ehealthinformatics.prognocare.feature.dashboard.support.SupportDashboardScreen
+import com.ehealthinformatics.prognocare.feature.dashboard.technician.TechnicianDashboardScreen
 import com.ehealthinformatics.prognocare.feature.dashboard.finance.FinanceBillDetailScreen
 import com.ehealthinformatics.prognocare.feature.dashboard.admin.AdminDashboardScreen
 import com.ehealthinformatics.prognocare.feature.auth.LoginScreen
@@ -219,8 +221,8 @@ fun PrognoCareNavGraph(
                                 selectedIconColor = androidx.compose.material3.MaterialTheme.colorScheme.primary,
                                 selectedTextColor = androidx.compose.material3.MaterialTheme.colorScheme.primary,
                                 indicatorColor = androidx.compose.material3.MaterialTheme.colorScheme.primaryContainer,
-                                unselectedIconColor = androidx.compose.ui.graphics.Color(0xFF9CA3AF),
-                                unselectedTextColor = androidx.compose.ui.graphics.Color(0xFF9CA3AF),
+                                unselectedIconColor = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant,
+                                unselectedTextColor = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant,
                             ),
                             onClick = {
                                 navController.navigate(item.route) {
@@ -512,8 +514,44 @@ fun PrognoCareNavGraph(
             }
 
             // ── Placeholder routes for other roles ────────────
-            composable(TechnicianRoutes.DASHBOARD) { /* Technician - Phase 6 */ }
-            composable(SupportRoutes.DASHBOARD) { /* Support - Phase 7 */ }
+            composable(TechnicianRoutes.DASHBOARD) {
+                TechnicianDashboardScreen(
+                    onNavigateToOrders = { /* TODO: navigate to orders screen */ },
+                    onNavigateToResults = { /* TODO: navigate to results screen */ },
+                    onNavigateToChat = {
+                        navController.navigate("chat/conversations") {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+                    onNavigateToProfile = {
+                        navController.navigate(ProfileRoutes.PROFILE)
+                    },
+                )
+            }
+            composable(SupportRoutes.DASHBOARD) {
+                val navBackStackEntry = rememberNavController() // reuses outer navController
+                SupportDashboardScreen(
+                    onNavigateToCheckIn = { /* TODO: navigate to check-in screen */ },
+                    onNavigateToRequests = { /* TODO: navigate to requests screen */ },
+                    onNavigateToPatientLookup = { /* TODO: navigate to patient lookup */ },
+                    onNavigateToChat = {
+                        navController.navigate("chat/conversations") {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+                    onNavigateToProfile = {
+                        navController.navigate(ProfileRoutes.PROFILE)
+                    },
+                )
+            }
 
             // Profile (shared across all roles)
             composable(ProfileRoutes.PROFILE) {

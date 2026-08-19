@@ -56,16 +56,7 @@ import com.ehealthinformatics.prognocare.designsystem.components.DashboardQuickA
 import com.ehealthinformatics.prognocare.designsystem.components.SectionHeader
 import com.ehealthinformatics.prognocare.designsystem.components.StatusBadge
 import com.ehealthinformatics.prognocare.designsystem.components.StatusType
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiBlue
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiBlueLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiGreen
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiGreenLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiOrange
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiOrangeLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiPurple
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiPurpleLight
-import com.ehealthinformatics.prognocare.designsystem.theme.NotificationBadge
-import com.ehealthinformatics.prognocare.designsystem.theme.Primary
+import com.ehealthinformatics.prognocare.designsystem.theme.AppThemeColors
 import com.ehealthinformatics.prognocare.designsystem.theme.Spacing
 
 @Composable
@@ -85,8 +76,8 @@ fun NurseDashboardScreen(
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = onNavigateToVitals,
-                containerColor = Primary,
-                contentColor = Color.White,
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
                 shape = RoundedCornerShape(Spacing.lg),
                 elevation = FloatingActionButtonDefaults.elevation(
                     defaultElevation = 6.dp,
@@ -123,27 +114,27 @@ fun NurseDashboardScreen(
                             Text(
                                 text = "${state.greeting},",
                                 style = MaterialTheme.typography.bodyLarge,
-                                color = Color(0xFF6B7280),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                             Text(
                                 text = state.nurseName,
                                 style = MaterialTheme.typography.headlineMedium,
                                 fontWeight = FontWeight.Bold,
-                                color = Primary,
+                                color = MaterialTheme.colorScheme.primary,
                             )
                             Spacer(modifier = Modifier.height(Spacing.xs))
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(
                                     imageVector = Icons.Default.CalendarMonth,
                                     contentDescription = null,
-                                    tint = Primary,
+                                    tint = MaterialTheme.colorScheme.primary,
                                     modifier = Modifier.size(16.dp),
                                 )
                                 Spacer(modifier = Modifier.width(Spacing.xs))
                                 Text(
                                     text = state.todayDate,
                                     style = MaterialTheme.typography.bodyMedium,
-                                    color = Color(0xFF6B7280),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
                             }
                         }
@@ -155,7 +146,7 @@ fun NurseDashboardScreen(
                                     Icon(
                                         imageVector = Icons.Default.Notifications,
                                         contentDescription = "Notifications",
-                                        tint = Color(0xFF6B7280),
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                         modifier = Modifier.size(28.dp),
                                     )
                                 }
@@ -165,13 +156,13 @@ fun NurseDashboardScreen(
                                             .align(Alignment.TopEnd)
                                             .size(20.dp)
                                             .clip(CircleShape)
-                                            .background(NotificationBadge),
+                                            .background(AppThemeColors.current.notificationBadge),
                                         contentAlignment = Alignment.Center,
                                     ) {
                                         Text(
                                             text = "${state.urgentTasks}",
                                             style = MaterialTheme.typography.labelSmall,
-                                            color = Color.White,
+                                            color = AppThemeColors.current.onNotificationBadge,
                                             fontWeight = FontWeight.Bold,
                                         )
                                     }
@@ -185,14 +176,14 @@ fun NurseDashboardScreen(
                                 modifier = Modifier
                                     .size(48.dp)
                                     .clip(CircleShape)
-                                    .background(Primary)
+                                    .background(MaterialTheme.colorScheme.primary)
                                     .clickable { onNavigateToProfile() },
                                 contentAlignment = Alignment.Center,
                             ) {
                                 Text(
                                     text = state.nurseName.take(1),
                                     style = MaterialTheme.typography.titleLarge,
-                                    color = Color.White,
+                                    color = MaterialTheme.colorScheme.onPrimary,
                                     fontWeight = FontWeight.Bold,
                                 )
                             }
@@ -215,8 +206,8 @@ fun NurseDashboardScreen(
                             title = "Checked In",
                             value = "${state.patientsCheckedIn}",
                             icon = Icons.Default.Person,
-                            iconTint = KpiBlue,
-                            iconBg = KpiBlueLight,
+                            iconTint = AppThemeColors.current.kpiBlue,
+                            iconBg = AppThemeColors.current.kpiBlueLight,
                             onClick = onNavigateToCheckIn,
                             modifier = Modifier.weight(1f),
                         )
@@ -224,8 +215,8 @@ fun NurseDashboardScreen(
                             title = "Vitals Pending",
                             value = "${state.vitalsToRecord}",
                             icon = Icons.Outlined.Bloodtype,
-                            iconTint = KpiOrange,
-                            iconBg = KpiOrangeLight,
+                            iconTint = AppThemeColors.current.kpiOrange,
+                            iconBg = AppThemeColors.current.kpiOrangeLight,
                             onClick = onNavigateToVitals,
                             modifier = Modifier.weight(1f),
                         )
@@ -238,8 +229,8 @@ fun NurseDashboardScreen(
                             title = "Meds Due",
                             value = "${state.medsToAdminister}",
                             icon = Icons.Outlined.MedicalServices,
-                            iconTint = Color(0xFFDC2626),
-                            iconBg = Color(0xFFFEE2E2),
+                            iconTint = MaterialTheme.colorScheme.error,
+                            iconBg = MaterialTheme.colorScheme.errorContainer,
                             onClick = onNavigateToMedications,
                             modifier = Modifier.weight(1f),
                         )
@@ -247,8 +238,8 @@ fun NurseDashboardScreen(
                             title = "Completed",
                             value = "${state.completedToday}",
                             icon = Icons.Default.CheckCircle,
-                            iconTint = KpiGreen,
-                            iconBg = KpiGreenLight,
+                            iconTint = AppThemeColors.current.kpiGreen,
+                            iconBg = AppThemeColors.current.kpiGreenLight,
                             onClick = { /* completed */ },
                             modifier = Modifier.weight(1f),
                         )
@@ -266,12 +257,12 @@ fun NurseDashboardScreen(
                         Text(
                             text = "Daily Progress",
                             style = MaterialTheme.typography.labelMedium,
-                            color = Color(0xFF6B7280),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                         Text(
                             text = "${state.completedToday}/$totalTasks tasks",
                             style = MaterialTheme.typography.labelSmall,
-                            color = Primary,
+                            color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.SemiBold,
                         )
                     }
@@ -282,8 +273,8 @@ fun NurseDashboardScreen(
                             .fillMaxWidth()
                             .height(8.dp)
                             .clip(RoundedCornerShape(4.dp)),
-                        color = KpiGreen,
-                        trackColor = KpiGreenLight,
+                        color = AppThemeColors.current.kpiGreen,
+                        trackColor = AppThemeColors.current.kpiGreenLight,
                     )
                 }
             }
@@ -300,32 +291,32 @@ fun NurseDashboardScreen(
                         DashboardQuickAction(
                             icon = Icons.Outlined.Bloodtype,
                             label = "Record Vitals",
-                            iconTint = KpiBlue,
-                            iconBg = KpiBlueLight,
+                            iconTint = AppThemeColors.current.kpiBlue,
+                            iconBg = AppThemeColors.current.kpiBlueLight,
                             onClick = onNavigateToVitals,
                             modifier = Modifier.weight(1f),
                         )
                         DashboardQuickAction(
                             icon = Icons.Outlined.MedicalServices,
                             label = "Administer Meds",
-                            iconTint = Color(0xFFDC2626),
-                            iconBg = Color(0xFFFEE2E2),
+                            iconTint = MaterialTheme.colorScheme.error,
+                            iconBg = MaterialTheme.colorScheme.errorContainer,
                             onClick = onNavigateToMedications,
                             modifier = Modifier.weight(1f),
                         )
                         DashboardQuickAction(
                             icon = Icons.Outlined.EventAvailable,
                             label = "Check In",
-                            iconTint = KpiGreen,
-                            iconBg = KpiGreenLight,
+                            iconTint = AppThemeColors.current.kpiGreen,
+                            iconBg = AppThemeColors.current.kpiGreenLight,
                             onClick = onNavigateToCheckIn,
                             modifier = Modifier.weight(1f),
                         )
                         DashboardQuickAction(
                             icon = Icons.Default.TaskAlt,
                             label = "View Tasks",
-                            iconTint = KpiPurple,
-                            iconBg = KpiPurpleLight,
+                            iconTint = AppThemeColors.current.kpiPurple,
+                            iconBg = AppThemeColors.current.kpiPurpleLight,
                             onClick = onNavigateToTasks,
                             modifier = Modifier.weight(1f),
                         )
@@ -402,10 +393,10 @@ private fun NurseTaskCard(
     modifier: Modifier = Modifier,
 ) {
     val priorityColor = when (task.priority) {
-        TaskPriority.URGENT -> Color(0xFFDC2626)
-        TaskPriority.HIGH -> KpiOrange
-        TaskPriority.NORMAL -> Primary
-        TaskPriority.LOW -> Color(0xFF6B7280)
+        TaskPriority.URGENT -> MaterialTheme.colorScheme.error
+        TaskPriority.HIGH -> AppThemeColors.current.kpiOrange
+        TaskPriority.NORMAL -> MaterialTheme.colorScheme.primary
+        TaskPriority.LOW -> MaterialTheme.colorScheme.onSurfaceVariant
     }
 
     val taskIcon = when (task.taskType) {
@@ -473,7 +464,7 @@ private fun NurseTaskCard(
                 Text(
                     text = task.description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFF6B7280),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
@@ -481,7 +472,7 @@ private fun NurseTaskCard(
                 Text(
                     text = "${task.scheduledTime} · ${task.taskType.name.replace("_", " ").lowercase().replaceFirstChar { it.uppercase() }}",
                     style = MaterialTheme.typography.labelSmall,
-                    color = Color(0xFF6B7280),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
 
@@ -491,7 +482,7 @@ private fun NurseTaskCard(
                     Icon(
                         imageVector = Icons.Default.CheckCircle,
                         contentDescription = "Complete task",
-                        tint = KpiGreen,
+                        tint = AppThemeColors.current.kpiGreen,
                         modifier = Modifier.size(28.dp),
                     )
                 }
@@ -499,7 +490,7 @@ private fun NurseTaskCard(
                 Icon(
                     imageVector = Icons.Default.CheckCircle,
                     contentDescription = "Completed",
-                    tint = KpiGreen,
+                    tint = AppThemeColors.current.kpiGreen,
                     modifier = Modifier.size(24.dp),
                 )
             }
@@ -529,13 +520,13 @@ private fun CheckInCard(
                 modifier = Modifier
                     .size(44.dp)
                     .clip(CircleShape)
-                    .background(KpiBlueLight),
+                    .background(AppThemeColors.current.kpiBlueLight),
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
                     text = checkIn.patientName.take(1),
                     style = MaterialTheme.typography.titleMedium,
-                    color = Primary,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold,
                 )
             }
@@ -551,7 +542,7 @@ private fun CheckInCard(
                 Text(
                     text = "${checkIn.appointmentType} · ${checkIn.providerName}",
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFF6B7280),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
 
@@ -568,15 +559,15 @@ private fun CheckInCard(
                             .size(8.dp)
                             .clip(CircleShape)
                             .background(
-                                if (checkIn.isCheckedIn) KpiGreen
-                                else Color(0xFFE2E8F0)
+                                if (checkIn.isCheckedIn) AppThemeColors.current.kpiGreen
+                                else MaterialTheme.colorScheme.outlineVariant
                             ),
                     )
                     Spacer(modifier = Modifier.width(Spacing.xs))
                     Text(
                         text = if (checkIn.isCheckedIn) "Checked in" else "Pending",
                         style = MaterialTheme.typography.labelSmall,
-                        color = if (checkIn.isCheckedIn) KpiGreen else Color(0xFF6B7280),
+                        color = if (checkIn.isCheckedIn) AppThemeColors.current.kpiGreen else MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             }
@@ -610,13 +601,13 @@ private fun VitalsSummaryCard(
                         modifier = Modifier
                             .size(36.dp)
                             .clip(CircleShape)
-                            .background(KpiGreenLight),
+                            .background(AppThemeColors.current.kpiGreenLight),
                         contentAlignment = Alignment.Center,
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Bloodtype,
                             contentDescription = null,
-                            tint = KpiGreen,
+                            tint = AppThemeColors.current.kpiGreen,
                             modifier = Modifier.size(18.dp),
                         )
                     }
@@ -630,7 +621,7 @@ private fun VitalsSummaryCard(
                 Text(
                     text = vitals.recordedAt,
                     style = MaterialTheme.typography.labelSmall,
-                    color = Color(0xFF6B7280),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
 
@@ -654,20 +645,20 @@ private fun VitalsChip(label: String, value: String, modifier: Modifier = Modifi
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(Spacing.sm))
-            .background(KpiBlueLight)
+            .background(AppThemeColors.current.kpiBlueLight)
             .padding(Spacing.sm),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
-            color = Color(0xFF6B7280),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Text(
             text = value,
             style = MaterialTheme.typography.bodySmall,
             fontWeight = FontWeight.SemiBold,
-            color = Primary,
+            color = MaterialTheme.colorScheme.primary,
         )
     }
 }

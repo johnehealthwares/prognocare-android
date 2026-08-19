@@ -56,16 +56,7 @@ import com.ehealthinformatics.prognocare.designsystem.components.DashboardQuickA
 import com.ehealthinformatics.prognocare.designsystem.components.SectionHeader
 import com.ehealthinformatics.prognocare.designsystem.components.StatusBadge
 import com.ehealthinformatics.prognocare.designsystem.components.StatusType
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiBlue
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiBlueLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiGreen
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiGreenLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiOrange
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiOrangeLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiPurple
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiPurpleLight
-import com.ehealthinformatics.prognocare.designsystem.theme.NotificationBadge
-import com.ehealthinformatics.prognocare.designsystem.theme.Primary
+import com.ehealthinformatics.prognocare.designsystem.theme.AppThemeColors
 import com.ehealthinformatics.prognocare.designsystem.theme.Spacing
 
 @Composable
@@ -105,27 +96,27 @@ fun AdminDashboardScreen(
                             Text(
                                 text = "${state.greeting},",
                                 style = MaterialTheme.typography.bodyLarge,
-                                color = Color(0xFF6B7280),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                             Text(
                                 text = state.adminName,
                                 style = MaterialTheme.typography.headlineMedium,
                                 fontWeight = FontWeight.Bold,
-                                color = Primary,
+                                color = MaterialTheme.colorScheme.primary,
                             )
                             Spacer(modifier = Modifier.height(Spacing.xs))
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(
                                     imageVector = Icons.Default.CalendarMonth,
                                     contentDescription = null,
-                                    tint = Primary,
+                                    tint = MaterialTheme.colorScheme.primary,
                                     modifier = Modifier.size(16.dp),
                                 )
                                 Spacer(modifier = Modifier.width(Spacing.xs))
                                 Text(
                                     text = state.todayDate,
                                     style = MaterialTheme.typography.bodyMedium,
-                                    color = Color(0xFF6B7280),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
                             }
                         }
@@ -136,7 +127,7 @@ fun AdminDashboardScreen(
                                     Icon(
                                         imageVector = Icons.Default.Notifications,
                                         contentDescription = "Notifications",
-                                        tint = Color(0xFF6B7280),
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                         modifier = Modifier.size(28.dp),
                                     )
                                 }
@@ -146,13 +137,13 @@ fun AdminDashboardScreen(
                                             .align(Alignment.TopEnd)
                                             .size(20.dp)
                                             .clip(CircleShape)
-                                            .background(NotificationBadge),
+                                            .background(AppThemeColors.current.notificationBadge),
                                         contentAlignment = Alignment.Center,
                                     ) {
                                         Text(
                                             text = "${state.waitingForCheckIn}",
                                             style = MaterialTheme.typography.labelSmall,
-                                            color = Color.White,
+                                            color = MaterialTheme.colorScheme.onPrimary,
                                             fontWeight = FontWeight.Bold,
                                         )
                                     }
@@ -165,14 +156,14 @@ fun AdminDashboardScreen(
                                 modifier = Modifier
                                     .size(48.dp)
                                     .clip(CircleShape)
-                                    .background(Primary)
+                                    .background(MaterialTheme.colorScheme.primary)
                                     .clickable { onNavigateToProfile() },
                                 contentAlignment = Alignment.Center,
                             ) {
                                 Text(
                                     text = state.adminName.take(1),
                                     style = MaterialTheme.typography.titleLarge,
-                                    color = Color.White,
+                                    color = MaterialTheme.colorScheme.onPrimary,
                                     fontWeight = FontWeight.Bold,
                                 )
                             }
@@ -195,8 +186,8 @@ fun AdminDashboardScreen(
                             title = "Total Patients",
                             value = "${state.totalPatients}",
                             icon = Icons.Default.Person,
-                            iconTint = KpiBlue,
-                            iconBg = KpiBlueLight,
+                            iconTint = AppThemeColors.current.kpiBlue,
+                            iconBg = AppThemeColors.current.kpiBlueLight,
                             onClick = onNavigateToPatientSearch,
                             modifier = Modifier.weight(1f),
                         )
@@ -204,8 +195,8 @@ fun AdminDashboardScreen(
                             title = "Checked In",
                             value = "${state.checkedInToday}",
                             icon = Icons.Outlined.EventAvailable,
-                            iconTint = KpiGreen,
-                            iconBg = KpiGreenLight,
+                            iconTint = AppThemeColors.current.kpiGreen,
+                            iconBg = AppThemeColors.current.kpiGreenLight,
                             onClick = onNavigateToCheckIn,
                             modifier = Modifier.weight(1f),
                         )
@@ -218,8 +209,8 @@ fun AdminDashboardScreen(
                             title = "Active Visits",
                             value = "${state.activeVisits}",
                             icon = Icons.Outlined.AssignmentTurnedIn,
-                            iconTint = KpiPurple,
-                            iconBg = KpiPurpleLight,
+                            iconTint = AppThemeColors.current.kpiPurple,
+                            iconBg = AppThemeColors.current.kpiPurpleLight,
                             onClick = { /* active visits */ },
                             modifier = Modifier.weight(1f),
                         )
@@ -227,8 +218,8 @@ fun AdminDashboardScreen(
                             title = "Total Staff",
                             value = "${state.totalStaff}",
                             icon = Icons.Outlined.Group,
-                            iconTint = KpiOrange,
-                            iconBg = KpiOrangeLight,
+                            iconTint = AppThemeColors.current.kpiOrange,
+                            iconBg = AppThemeColors.current.kpiOrangeLight,
                             onClick = onNavigateToStaff,
                             modifier = Modifier.weight(1f),
                         )
@@ -251,14 +242,14 @@ fun AdminDashboardScreen(
                             Icon(
                                 Icons.Outlined.Search,
                                 contentDescription = null,
-                                tint = Color(0xFF6B7280),
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                         },
                         singleLine = true,
                         shape = RoundedCornerShape(Spacing.base),
                         colors = OutlinedTextFieldDefaults.colors(
-                            unfocusedContainerColor = Color(0xFFF8FAFC),
-                            focusedContainerColor = Color(0xFFF8FAFC),
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                            focusedContainerColor = MaterialTheme.colorScheme.surface,
                         ),
                     )
                 }
@@ -300,32 +291,32 @@ fun AdminDashboardScreen(
                         DashboardQuickAction(
                             icon = Icons.Outlined.PersonAdd,
                             label = "Register\nPatient",
-                            iconTint = KpiBlue,
-                            iconBg = KpiBlueLight,
+                            iconTint = AppThemeColors.current.kpiBlue,
+                            iconBg = AppThemeColors.current.kpiBlueLight,
                             onClick = { /* register patient */ },
                             modifier = Modifier.weight(1f),
                         )
                         DashboardQuickAction(
                             icon = Icons.Outlined.EventAvailable,
                             label = "Check In\nPatient",
-                            iconTint = KpiGreen,
-                            iconBg = KpiGreenLight,
+                            iconTint = AppThemeColors.current.kpiGreen,
+                            iconBg = AppThemeColors.current.kpiGreenLight,
                             onClick = onNavigateToCheckIn,
                             modifier = Modifier.weight(1f),
                         )
                         DashboardQuickAction(
                             icon = Icons.Outlined.Settings,
                             label = "Manage\nStaff",
-                            iconTint = KpiPurple,
-                            iconBg = KpiPurpleLight,
+                            iconTint = AppThemeColors.current.kpiPurple,
+                            iconBg = AppThemeColors.current.kpiPurpleLight,
                             onClick = onNavigateToStaff,
                             modifier = Modifier.weight(1f),
                         )
                         DashboardQuickAction(
                             icon = Icons.Outlined.AssignmentTurnedIn,
                             label = "View\nReports",
-                            iconTint = KpiOrange,
-                            iconBg = KpiOrangeLight,
+                            iconTint = AppThemeColors.current.kpiOrange,
+                            iconBg = AppThemeColors.current.kpiOrangeLight,
                             onClick = { /* reports */ },
                             modifier = Modifier.weight(1f),
                         )
@@ -382,13 +373,13 @@ private fun PatientSearchCard(
                 modifier = Modifier
                     .size(44.dp)
                     .clip(CircleShape)
-                    .background(KpiBlueLight),
+                    .background(AppThemeColors.current.kpiBlueLight),
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
                     text = patient.name.take(1),
                     style = MaterialTheme.typography.titleMedium,
-                    color = Primary,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold,
                 )
             }
@@ -410,12 +401,12 @@ private fun PatientSearchCard(
                 Text(
                     text = "${patient.mrn} · ${patient.age}y · ${patient.gender}",
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFF6B7280),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Text(
                     text = patient.phone,
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFF6B7280),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
 
@@ -433,7 +424,7 @@ private fun PatientSearchCard(
                     Text(
                         text = "Last: ${patient.lastVisit}",
                         style = MaterialTheme.typography.labelSmall,
-                        color = Color(0xFF9CA3AF),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             }
@@ -478,12 +469,12 @@ private fun CheckInQueueCard(
                     text = checkIn.appointmentTime.split(" ")[0],
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
-                    color = Primary,
+                    color = MaterialTheme.colorScheme.primary,
                 )
                 Text(
                     text = checkIn.appointmentTime.split(" ").getOrElse(1) { "" },
                     style = MaterialTheme.typography.labelSmall,
-                    color = Color(0xFF6B7280),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
 
@@ -494,13 +485,13 @@ private fun CheckInQueueCard(
                 modifier = Modifier
                     .size(44.dp)
                     .clip(CircleShape)
-                    .background(KpiBlueLight),
+                    .background(AppThemeColors.current.kpiBlueLight),
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
                     text = checkIn.patientName.take(1),
                     style = MaterialTheme.typography.titleMedium,
-                    color = Primary,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold,
                 )
             }
@@ -517,12 +508,12 @@ private fun CheckInQueueCard(
                 Text(
                     text = "${checkIn.appointmentType} · ${checkIn.providerName}",
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFF6B7280),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Text(
                     text = checkIn.department,
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFF9CA3AF),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
 
@@ -535,7 +526,7 @@ private fun CheckInQueueCard(
                         Text(
                             text = "Check In",
                             style = MaterialTheme.typography.labelMedium,
-                            color = KpiGreen,
+                            color = AppThemeColors.current.kpiGreen,
                             fontWeight = FontWeight.SemiBold,
                             modifier = Modifier.clickable { onCheckIn() },
                         )
@@ -544,7 +535,7 @@ private fun CheckInQueueCard(
                         Text(
                             text = "Check Out",
                             style = MaterialTheme.typography.labelMedium,
-                            color = KpiOrange,
+                            color = AppThemeColors.current.kpiOrange,
                             fontWeight = FontWeight.SemiBold,
                             modifier = Modifier.clickable { onCheckOut() },
                         )

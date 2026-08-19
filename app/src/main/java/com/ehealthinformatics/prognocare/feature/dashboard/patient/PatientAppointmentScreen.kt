@@ -51,9 +51,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.ehealthinformatics.prognocare.designsystem.components.EmptyState
-import com.ehealthinformatics.prognocare.designsystem.theme.Primary
 import com.ehealthinformatics.prognocare.designsystem.components.StatusBadge
 import com.ehealthinformatics.prognocare.designsystem.components.StatusType
+import com.ehealthinformatics.prognocare.designsystem.theme.AppThemeColors
 import com.ehealthinformatics.prognocare.designsystem.theme.Spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -129,7 +129,7 @@ fun PatientAppointmentScreen(
             if (selectedTab == 0) {
                 FloatingActionButton(
                     onClick = { /* book appointment */ },
-                    containerColor = Primary,
+                    containerColor = MaterialTheme.colorScheme.primary,
                 ) {
                     Icon(Icons.Default.Add, contentDescription = "Book Appointment")
                 }

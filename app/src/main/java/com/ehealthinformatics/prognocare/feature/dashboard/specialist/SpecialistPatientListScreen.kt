@@ -48,7 +48,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.ehealthinformatics.prognocare.designsystem.components.EmptyState
-import com.ehealthinformatics.prognocare.designsystem.theme.Primary
+import com.ehealthinformatics.prognocare.designsystem.theme.AppThemeColors
 import com.ehealthinformatics.prognocare.designsystem.theme.Spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -243,7 +243,7 @@ private fun PatientCard(
                 Text(
                     text = patient.condition,
                     style = MaterialTheme.typography.labelMedium,
-                    color = Primary,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Medium,
                 )
             }
@@ -254,14 +254,14 @@ private fun PatientCard(
                     Icon(
                         imageVector = if (patient.isOngoing) Icons.Default.CheckCircle else Icons.Default.Person,
                         contentDescription = null,
-                        tint = if (patient.isOngoing) Primary else Color(0xFF6B7280),
+                        tint = if (patient.isOngoing) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.size(16.dp),
                     )
                     Spacer(modifier = Modifier.width(Spacing.xs))
                     Text(
                         text = if (patient.isOngoing) "Ongoing" else "Completed",
                         style = MaterialTheme.typography.labelSmall,
-                        color = if (patient.isOngoing) Primary else Color(0xFF6B7280),
+                        color = if (patient.isOngoing) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
                 if (patient.nextAppointment != null) {

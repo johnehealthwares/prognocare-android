@@ -49,6 +49,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.ehealthinformatics.prognocare.designsystem.components.StatusBadge
 import com.ehealthinformatics.prognocare.designsystem.components.StatusType
+import com.ehealthinformatics.prognocare.designsystem.theme.AppThemeColors
 import com.ehealthinformatics.prognocare.designsystem.theme.Spacing
 import com.ehealthinformatics.prognocare.designsystem.theme.Tertiary
 
@@ -208,7 +209,7 @@ private fun AppointmentListItem(
                     .clip(RoundedCornerShape(2.dp))
                     .background(
                         if (appointment.status == "IN_PROGRESS") MaterialTheme.colorScheme.primary
-                        else if (appointment.isUrgent) androidx.compose.ui.graphics.Color(0xFFF59E0B)
+                        else if (appointment.isUrgent) AppThemeColors.current.warning
                         else MaterialTheme.colorScheme.outlineVariant
                     ),
             )

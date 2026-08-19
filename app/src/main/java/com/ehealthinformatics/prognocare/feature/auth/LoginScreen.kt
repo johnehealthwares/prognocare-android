@@ -64,14 +64,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.Image
 import androidx.compose.ui.res.painterResource
 import com.ehealthinformatics.prognocare.R
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiBlue
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiBlueLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiGreen
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiGreenLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiOrange
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiOrangeLight
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiPurple
-import com.ehealthinformatics.prognocare.designsystem.theme.KpiPurpleLight
+import com.ehealthinformatics.prognocare.designsystem.theme.AppThemeColors
 import com.ehealthinformatics.prognocare.designsystem.theme.Primary
 import com.ehealthinformatics.prognocare.designsystem.theme.PrimaryDark
 import com.ehealthinformatics.prognocare.designsystem.theme.Spacing
@@ -105,7 +98,7 @@ fun LoginScreen(
                 .background(
                     Brush.verticalGradient(
                         colors = listOf(
-                            Primary,
+                            MaterialTheme.colorScheme.primary,
                             PrimaryDark,
                         )
                     )
@@ -146,9 +139,9 @@ fun LoginScreen(
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(Spacing.sm),
                 ) {
-                    FeaturePill(text = "Secure", color = KpiGreenLight)
-                    FeaturePill(text = "Fast", color = KpiBlueLight)
-                    FeaturePill(text = "Reliable", color = KpiOrangeLight)
+                    FeaturePill(text = "Secure", color = AppThemeColors.current.kpiGreenLight)
+                    FeaturePill(text = "Fast", color = AppThemeColors.current.kpiBlueLight)
+                    FeaturePill(text = "Reliable", color = AppThemeColors.current.kpiOrangeLight)
                 }
             }
         }
@@ -163,14 +156,14 @@ fun LoginScreen(
             Text(
                 text = "Welcome back",
                 style = MaterialTheme.typography.headlineSmall,
-                color = Color(0xFF1E293B),
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold,
             )
             Spacer(modifier = Modifier.height(Spacing.xs))
             Text(
                 text = "Sign in to your account",
                 style = MaterialTheme.typography.bodyMedium,
-                color = Color(0xFF6B7280),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Spacer(modifier = Modifier.height(Spacing.xl))
 
@@ -181,7 +174,7 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text("Email") },
                 leadingIcon = {
-                    Icon(Icons.Outlined.Mail, contentDescription = null, tint = Primary)
+                    Icon(Icons.Outlined.Mail, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email,
@@ -193,10 +186,10 @@ fun LoginScreen(
                 singleLine = true,
                 shape = RoundedCornerShape(Spacing.md),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Primary,
-                    unfocusedBorderColor = Color(0xFFE2E8F0),
-                    focusedContainerColor = Color(0xFFF8FAFC),
-                    unfocusedContainerColor = Color(0xFFF8FAFC),
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
                 ),
             )
             Spacer(modifier = Modifier.height(Spacing.md))
@@ -208,14 +201,14 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text("Password") },
                 leadingIcon = {
-                    Icon(Icons.Outlined.Lock, contentDescription = null, tint = Primary)
+                    Icon(Icons.Outlined.Lock, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                 },
                 trailingIcon = {
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
                         Icon(
                             imageVector = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                             contentDescription = if (passwordVisible) "Hide password" else "Show password",
-                            tint = Color(0xFF6B7280),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
                 },
@@ -235,10 +228,10 @@ fun LoginScreen(
                 singleLine = true,
                 shape = RoundedCornerShape(Spacing.md),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Primary,
-                    unfocusedBorderColor = Color(0xFFE2E8F0),
-                    focusedContainerColor = Color(0xFFF8FAFC),
-                    unfocusedContainerColor = Color(0xFFF8FAFC),
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
                 ),
             )
             Spacer(modifier = Modifier.height(Spacing.sm))
@@ -250,7 +243,7 @@ fun LoginScreen(
                 Text(
                     text = "Forgot password?",
                     style = MaterialTheme.typography.labelLarge,
-                    color = Primary,
+                    color = MaterialTheme.colorScheme.primary,
                 )
             }
             Spacer(modifier = Modifier.height(Spacing.lg))
@@ -264,12 +257,12 @@ fun LoginScreen(
                 Text(
                     text = "Select role (demo)",
                     style = MaterialTheme.typography.labelMedium,
-                    color = Color(0xFF6B7280),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Text(
                     text = "8 roles available",
                     style = MaterialTheme.typography.labelSmall,
-                    color = Primary,
+                    color = MaterialTheme.colorScheme.primary,
                 )
             }
             Spacer(modifier = Modifier.height(Spacing.sm))
@@ -284,10 +277,10 @@ fun LoginScreen(
                     row.forEach { role ->
                         val isSelected = selectedRole == role
                         val (bgColor, iconColor) = when (role) {
-                            UserRole.Doctor -> KpiBlueLight to KpiBlue
-                            UserRole.Nurse -> KpiGreenLight to KpiGreen
-                            UserRole.Patient -> KpiPurpleLight to KpiPurple
-                            UserRole.Specialist -> KpiOrangeLight to KpiOrange
+                            UserRole.Doctor -> AppThemeColors.current.kpiBlueLight to AppThemeColors.current.kpiBlue
+                            UserRole.Nurse -> AppThemeColors.current.kpiGreenLight to AppThemeColors.current.kpiGreen
+                            UserRole.Patient -> AppThemeColors.current.kpiPurpleLight to AppThemeColors.current.kpiPurple
+                            UserRole.Specialist -> AppThemeColors.current.kpiOrangeLight to AppThemeColors.current.kpiOrange
                             UserRole.Therapist -> Color(0xFFFCE7F3) to Color(0xFFEC4899)
                             UserRole.Technician -> Color(0xFFE0E7FF) to Color(0xFF6366F1)
                             UserRole.Finance -> Color(0xFFFEF3C7) to Color(0xFFD97706)
@@ -302,7 +295,7 @@ fun LoginScreen(
                                 .clickable { selectedRole = role },
                             shape = RoundedCornerShape(Spacing.sm),
                             colors = CardDefaults.cardColors(
-                                containerColor = if (isSelected) bgColor else Color(0xFFF1F5F9),
+                                containerColor = if (isSelected) bgColor else MaterialTheme.colorScheme.surfaceVariant,
                             ),
                             elevation = CardDefaults.cardElevation(
                                 defaultElevation = if (isSelected) 2.dp else 0.dp,
@@ -318,13 +311,13 @@ fun LoginScreen(
                                     modifier = Modifier
                                         .size(32.dp)
                                         .clip(CircleShape)
-                                        .background(if (isSelected) iconColor.copy(alpha = 0.2f) else Color(0xFFE2E8F0)),
+                                        .background(if (isSelected) iconColor.copy(alpha = 0.2f) else MaterialTheme.colorScheme.outlineVariant),
                                     contentAlignment = Alignment.Center,
                                 ) {
                                     Text(
                                         text = role.displayName.take(1),
                                         style = MaterialTheme.typography.labelMedium,
-                                        color = if (isSelected) iconColor else Color(0xFF6B7280),
+                                        color = if (isSelected) iconColor else MaterialTheme.colorScheme.onSurfaceVariant,
                                         fontWeight = FontWeight.Bold,
                                     )
                                 }
@@ -332,7 +325,7 @@ fun LoginScreen(
                                 Text(
                                     text = role.displayName,
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = if (isSelected) iconColor else Color(0xFF6B7280),
+                                    color = if (isSelected) iconColor else MaterialTheme.colorScheme.onSurfaceVariant,
                                     textAlign = TextAlign.Center,
                                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                                 )
@@ -362,7 +355,7 @@ fun LoginScreen(
                 enabled = !isLoading,
                 shape = RoundedCornerShape(Spacing.md),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Primary,
+                    containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = Color.White,
                 ),
             ) {
@@ -401,14 +394,14 @@ fun LoginScreen(
                 Text(
                     text = "Don't have an account?",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color(0xFF6B7280),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Spacer(modifier = Modifier.width(Spacing.xs))
                 TextButton(onClick = { /* TODO: sign up */ }) {
                     Text(
                         text = "Sign Up",
                         fontWeight = FontWeight.SemiBold,
-                        color = Primary,
+                        color = MaterialTheme.colorScheme.primary,
                     )
                 }
             }
@@ -418,13 +411,13 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                HorizontalDivider(modifier = Modifier.weight(1f), color = Color(0xFFE2E8F0))
+                HorizontalDivider(modifier = Modifier.weight(1f), color = MaterialTheme.colorScheme.outlineVariant)
                 Text(
                     text = "  or continue with  ",
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFF9CA3AF),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-                HorizontalDivider(modifier = Modifier.weight(1f), color = Color(0xFFE2E8F0))
+                HorizontalDivider(modifier = Modifier.weight(1f), color = MaterialTheme.colorScheme.outlineVariant)
             }
 
             Spacer(modifier = Modifier.height(Spacing.lg))
@@ -482,7 +475,7 @@ private fun SocialLoginButton(
             .height(48.dp)
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(Spacing.md),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFF8FAFC)),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
     ) {
         Box(
@@ -492,7 +485,7 @@ private fun SocialLoginButton(
             Text(
                 text = text,
                 style = MaterialTheme.typography.bodyMedium,
-                color = Color(0xFF475569),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center,
             )

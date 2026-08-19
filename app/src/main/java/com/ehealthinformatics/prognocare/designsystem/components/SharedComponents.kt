@@ -41,6 +41,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.ehealthinformatics.prognocare.designsystem.theme.AppThemeColors
 import com.ehealthinformatics.prognocare.designsystem.theme.Spacing
 
 // ── Status Badge ──────────────────────────────────────────────
@@ -55,15 +56,16 @@ fun StatusBadge(
     type: StatusType,
     modifier: Modifier = Modifier,
 ) {
+    val colors = AppThemeColors.current
     val (containerColor, contentColor) = when (type) {
-        StatusType.Active -> MaterialTheme.colorScheme.primaryContainer to MaterialTheme.colorScheme.onPrimaryContainer
-        StatusType.Completed -> MaterialTheme.colorScheme.tertiaryContainer to MaterialTheme.colorScheme.onTertiaryContainer
-        StatusType.Pending -> MaterialTheme.colorScheme.secondaryContainer to MaterialTheme.colorScheme.onSecondaryContainer
-        StatusType.Cancelled -> MaterialTheme.colorScheme.errorContainer to MaterialTheme.colorScheme.onErrorContainer
-        StatusType.Urgent -> Color(0xFFFFF3CD) to Color(0xFF78350F)
-        StatusType.InProgress -> MaterialTheme.colorScheme.tertiaryContainer to MaterialTheme.colorScheme.onTertiaryContainer
-        StatusType.Scheduled -> MaterialTheme.colorScheme.primaryContainer to MaterialTheme.colorScheme.onPrimaryContainer
-        StatusType.Draft -> MaterialTheme.colorScheme.surfaceVariant to MaterialTheme.colorScheme.onSurfaceVariant
+        StatusType.Active -> colors.primaryContainer to colors.onPrimaryContainer
+        StatusType.Completed -> colors.tertiaryContainer to colors.onTertiaryContainer
+        StatusType.Pending -> colors.secondaryContainer to colors.onSecondaryContainer
+        StatusType.Cancelled -> colors.errorContainer to colors.onErrorContainer
+        StatusType.Urgent -> colors.warningContainer to colors.onWarningContainer
+        StatusType.InProgress -> colors.inProgressContainer to colors.onInProgressContainer
+        StatusType.Scheduled -> colors.scheduledContainer to colors.onScheduledContainer
+        StatusType.Draft -> colors.surfaceVariant to colors.onSurfaceVariant
     }
 
     Box(
