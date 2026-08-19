@@ -1,0 +1,501 @@
+package com.ehealthinformatics.prognocare.feature.auth
+
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Mail
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+import com.ehealthinformatics.prognocare.R
+import com.ehealthinformatics.prognocare.designsystem.theme.KpiBlue
+import com.ehealthinformatics.prognocare.designsystem.theme.KpiBlueLight
+import com.ehealthinformatics.prognocare.designsystem.theme.KpiGreen
+import com.ehealthinformatics.prognocare.designsystem.theme.KpiGreenLight
+import com.ehealthinformatics.prognocare.designsystem.theme.KpiOrange
+import com.ehealthinformatics.prognocare.designsystem.theme.KpiOrangeLight
+import com.ehealthinformatics.prognocare.designsystem.theme.KpiPurple
+import com.ehealthinformatics.prognocare.designsystem.theme.KpiPurpleLight
+import com.ehealthinformatics.prognocare.designsystem.theme.Primary
+import com.ehealthinformatics.prognocare.designsystem.theme.PrimaryDark
+import com.ehealthinformatics.prognocare.designsystem.theme.Spacing
+import com.ehealthinformatics.prognocare.feature.splash.SplashViewModel
+import com.ehealthinformatics.prognocare.navigation.UserRole
+
+@Composable
+fun LoginScreen(
+    onLoginSuccess: (UserRole) -> Unit,
+) {
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(false) }
+    var selectedRole by remember { mutableStateOf(UserRole.Doctor) }
+
+    val focusManager = LocalFocusManager.current
+    val context = LocalContext.current
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .imePadding(),
+    ) {
+        // ── Header / Branding ───────────────────────────────
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(260.dp)
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            Primary,
+                            PrimaryDark,
+                        )
+                    )
+                ),
+            contentAlignment = Alignment.Center,
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                // Logo with white background
+                Box(
+                    modifier = Modifier
+                        .size(80.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(Color.White.copy(alpha = 0.2f)),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.logo_honeycomb),
+                        contentDescription = "eHealthWares Logo",
+                        modifier = Modifier.size(60.dp),
+                    )
+                }
+                Spacer(modifier = Modifier.height(Spacing.base))
+                Text(
+                    text = "PrognoCare",
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                )
+                Text(
+                    text = "Electronic Medical Records",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White.copy(alpha = 0.85f),
+                )
+                Spacer(modifier = Modifier.height(Spacing.lg))
+                // Feature pills
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(Spacing.sm),
+                ) {
+                    FeaturePill(text = "Secure", color = KpiGreenLight)
+                    FeaturePill(text = "Fast", color = KpiBlueLight)
+                    FeaturePill(text = "Reliable", color = KpiOrangeLight)
+                }
+            }
+        }
+
+        // ── Login Form ──────────────────────────────────────
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(Spacing.xl),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                text = "Welcome back",
+                style = MaterialTheme.typography.headlineSmall,
+                color = Color(0xFF1E293B),
+                fontWeight = FontWeight.Bold,
+            )
+            Spacer(modifier = Modifier.height(Spacing.xs))
+            Text(
+                text = "Sign in to your account",
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color(0xFF6B7280),
+            )
+            Spacer(modifier = Modifier.height(Spacing.xl))
+
+            // Email
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text("Email") },
+                leadingIcon = {
+                    Icon(Icons.Outlined.Mail, contentDescription = null, tint = Primary)
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email,
+                    imeAction = ImeAction.Next,
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = { focusManager.moveFocus(FocusDirection.Down) },
+                ),
+                singleLine = true,
+                shape = RoundedCornerShape(Spacing.md),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Primary,
+                    unfocusedBorderColor = Color(0xFFE2E8F0),
+                    focusedContainerColor = Color(0xFFF8FAFC),
+                    unfocusedContainerColor = Color(0xFFF8FAFC),
+                ),
+            )
+            Spacer(modifier = Modifier.height(Spacing.md))
+
+            // Password
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it },
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text("Password") },
+                leadingIcon = {
+                    Icon(Icons.Outlined.Lock, contentDescription = null, tint = Primary)
+                },
+                trailingIcon = {
+                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                        Icon(
+                            imageVector = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                            contentDescription = if (passwordVisible) "Hide password" else "Show password",
+                            tint = Color(0xFF6B7280),
+                        )
+                    }
+                },
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Done,
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        focusManager.clearFocus()
+                        isLoading = true
+                        SplashViewModel.saveAuthState(context, selectedRole)
+                        onLoginSuccess(selectedRole)
+                    },
+                ),
+                singleLine = true,
+                shape = RoundedCornerShape(Spacing.md),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Primary,
+                    unfocusedBorderColor = Color(0xFFE2E8F0),
+                    focusedContainerColor = Color(0xFFF8FAFC),
+                    unfocusedContainerColor = Color(0xFFF8FAFC),
+                ),
+            )
+            Spacer(modifier = Modifier.height(Spacing.sm))
+
+            TextButton(
+                onClick = { /* TODO: forgot password */ },
+                modifier = Modifier.align(Alignment.End),
+            ) {
+                Text(
+                    text = "Forgot password?",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = Primary,
+                )
+            }
+            Spacer(modifier = Modifier.height(Spacing.lg))
+
+            // ── Role Selector (Demo) ────────────────────────
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = "Select role (demo)",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = Color(0xFF6B7280),
+                )
+                Text(
+                    text = "8 roles available",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = Primary,
+                )
+            }
+            Spacer(modifier = Modifier.height(Spacing.sm))
+
+            // Role grid - 2 rows of 4
+            val roles = UserRole.entries.chunked(4)
+            roles.forEach { row ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(Spacing.sm),
+                ) {
+                    row.forEach { role ->
+                        val isSelected = selectedRole == role
+                        val (bgColor, iconColor) = when (role) {
+                            UserRole.Doctor -> KpiBlueLight to KpiBlue
+                            UserRole.Nurse -> KpiGreenLight to KpiGreen
+                            UserRole.Patient -> KpiPurpleLight to KpiPurple
+                            UserRole.Specialist -> KpiOrangeLight to KpiOrange
+                            UserRole.Therapist -> Color(0xFFFCE7F3) to Color(0xFFEC4899)
+                            UserRole.Technician -> Color(0xFFE0E7FF) to Color(0xFF6366F1)
+                            UserRole.Finance -> Color(0xFFFEF3C7) to Color(0xFFD97706)
+                            UserRole.Support -> Color(0xFFFFF7ED) to Color(0xFFF97316)
+                            UserRole.Admin -> Color(0xFFFEE2E2) to Color(0xFFDC2626)
+                        }
+
+                        Card(
+                            modifier = Modifier
+                                .weight(1f)
+                                .clip(RoundedCornerShape(Spacing.sm))
+                                .clickable { selectedRole = role },
+                            shape = RoundedCornerShape(Spacing.sm),
+                            colors = CardDefaults.cardColors(
+                                containerColor = if (isSelected) bgColor else Color(0xFFF1F5F9),
+                            ),
+                            elevation = CardDefaults.cardElevation(
+                                defaultElevation = if (isSelected) 2.dp else 0.dp,
+                            ),
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = Spacing.sm, horizontal = Spacing.xs),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(32.dp)
+                                        .clip(CircleShape)
+                                        .background(if (isSelected) iconColor.copy(alpha = 0.2f) else Color(0xFFE2E8F0)),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    Text(
+                                        text = role.displayName.take(1),
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = if (isSelected) iconColor else Color(0xFF6B7280),
+                                        fontWeight = FontWeight.Bold,
+                                    )
+                                }
+                                Spacer(modifier = Modifier.height(Spacing.xs))
+                                Text(
+                                    text = role.displayName,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = if (isSelected) iconColor else Color(0xFF6B7280),
+                                    textAlign = TextAlign.Center,
+                                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                                )
+                            }
+                        }
+                    }
+                    // Fill remaining space in the last row
+                    repeat(4 - row.size) {
+                        Spacer(modifier = Modifier.weight(1f))
+                    }
+                }
+                Spacer(modifier = Modifier.height(Spacing.sm))
+            }
+
+            Spacer(modifier = Modifier.height(Spacing.xl))
+
+            // ── Login Button ─────────────────────────────────
+            Button(
+                onClick = {
+                    isLoading = true
+                    SplashViewModel.saveAuthState(context, selectedRole)
+                    onLoginSuccess(selectedRole)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                enabled = !isLoading,
+                shape = RoundedCornerShape(Spacing.md),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Primary,
+                    contentColor = Color.White,
+                ),
+            ) {
+                AnimatedVisibility(
+                    visible = isLoading,
+                    enter = fadeIn(),
+                    exit = fadeOut(),
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(24.dp),
+                        color = Color.White,
+                        strokeWidth = 2.dp,
+                    )
+                }
+                AnimatedVisibility(
+                    visible = !isLoading,
+                    enter = fadeIn(),
+                    exit = fadeOut(),
+                ) {
+                    Text(
+                        text = "Sign In",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(Spacing.xl))
+
+            // ── Sign up link ─────────────────────────────────
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = "Don't have an account?",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color(0xFF6B7280),
+                )
+                Spacer(modifier = Modifier.width(Spacing.xs))
+                TextButton(onClick = { /* TODO: sign up */ }) {
+                    Text(
+                        text = "Sign Up",
+                        fontWeight = FontWeight.SemiBold,
+                        color = Primary,
+                    )
+                }
+            }
+
+            // ── Divider with "or" ────────────────────────────
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                HorizontalDivider(modifier = Modifier.weight(1f), color = Color(0xFFE2E8F0))
+                Text(
+                    text = "  or continue with  ",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color(0xFF9CA3AF),
+                )
+                HorizontalDivider(modifier = Modifier.weight(1f), color = Color(0xFFE2E8F0))
+            }
+
+            Spacer(modifier = Modifier.height(Spacing.lg))
+
+            // ── Social login buttons ─────────────────────────
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(Spacing.md),
+            ) {
+                SocialLoginButton(
+                    text = "Google",
+                    onClick = { /* TODO: Google login */ },
+                    modifier = Modifier.weight(1f),
+                )
+                SocialLoginButton(
+                    text = "Apple",
+                    onClick = { /* TODO: Apple login */ },
+                    modifier = Modifier.weight(1f),
+                )
+            }
+
+            Spacer(modifier = Modifier.height(Spacing.xxl))
+        }
+    }
+}
+
+@Composable
+private fun FeaturePill(
+    text: String,
+    color: Color,
+) {
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(20.dp))
+            .background(color.copy(alpha = 0.3f))
+            .padding(horizontal = Spacing.md, vertical = Spacing.xs),
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelSmall,
+            color = Color.White,
+            fontWeight = FontWeight.Medium,
+        )
+    }
+}
+
+@Composable
+private fun SocialLoginButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier
+            .height(48.dp)
+            .clickable(onClick = onClick),
+        shape = RoundedCornerShape(Spacing.md),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFF8FAFC)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color(0xFF475569),
+                fontWeight = FontWeight.Medium,
+                textAlign = TextAlign.Center,
+            )
+        }
+    }
+}

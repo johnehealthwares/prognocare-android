@@ -1,0 +1,291 @@
+package com.ehealthinformatics.prognocare.feature.dashboard.nurse
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
+import com.ehealthinformatics.prognocare.designsystem.theme.Spacing
+import com.ehealthinformatics.prognocare.designsystem.theme.Tertiary
+import kotlinx.coroutines.launch
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun VitalsRecordingScreen(
+    onBack: () -> Unit,
+    onSaved: () -> Unit,
+) {
+    var patientName by remember { mutableStateOf("") }
+    var temperature by remember { mutableStateOf("") }
+    var bpSystolic by remember { mutableStateOf("") }
+    var bpDiastolic by remember { mutableStateOf("") }
+    var heartRate by remember { mutableStateOf("") }
+    var respiratoryRate by remember { mutableStateOf("") }
+    var oxygenSaturation by remember { mutableStateOf("") }
+    var weight by remember { mutableStateOf("") }
+    var height by remember { mutableStateOf("") }
+    var notes by remember { mutableStateOf("") }
+
+    val focusManager = LocalFocusManager.current
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = "Record Vitals",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface),
+            )
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = Spacing.lg),
+        ) {
+            Spacer(modifier = Modifier.height(Spacing.sm))
+
+            // Patient selector
+            VitalsSection("Patient") {
+                OutlinedTextField(
+                    value = patientName,
+                    onValueChange = { patientName = it },
+                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text("Search patient by name or MRN") },
+                    singleLine = true,
+                    shape = RoundedCornerShape(Spacing.md),
+                )
+            }
+
+            // Vital Signs
+            VitalsSection("Vital Signs") {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(Spacing.md),
+                ) {
+                    VitalsInput(
+                        label = "Temperature (°C)",
+                        value = temperature,
+                        onValueChange = { temperature = it },
+                        keyboardType = KeyboardType.Decimal,
+                        modifier = Modifier.weight(1f),
+                    )
+                    VitalsInput(
+                        label = "Heart Rate (bpm)",
+                        value = heartRate,
+                        onValueChange = { heartRate = it },
+                        keyboardType = KeyboardType.Number,
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+                Spacer(modifier = Modifier.height(Spacing.md))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(Spacing.md),
+                ) {
+                    VitalsInput(
+                        label = "BP Systolic",
+                        value = bpSystolic,
+                        onValueChange = { bpSystolic = it },
+                        keyboardType = KeyboardType.Number,
+                        modifier = Modifier.weight(1f),
+                    )
+                    VitalsInput(
+                        label = "BP Diastolic",
+                        value = bpDiastolic,
+                        onValueChange = { bpDiastolic = it },
+                        keyboardType = KeyboardType.Number,
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+                Spacer(modifier = Modifier.height(Spacing.md))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(Spacing.md),
+                ) {
+                    VitalsInput(
+                        label = "Resp. Rate",
+                        value = respiratoryRate,
+                        onValueChange = { respiratoryRate = it },
+                        keyboardType = KeyboardType.Number,
+                        modifier = Modifier.weight(1f),
+                    )
+                    VitalsInput(
+                        label = "SpO₂ (%)",
+                        value = oxygenSaturation,
+                        onValueChange = { oxygenSaturation = it },
+                        keyboardType = KeyboardType.Number,
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+            }
+
+            // Anthropometrics
+            VitalsSection("Anthropometrics") {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(Spacing.md),
+                ) {
+                    VitalsInput(
+                        label = "Weight (kg)",
+                        value = weight,
+                        onValueChange = { weight = it },
+                        keyboardType = KeyboardType.Decimal,
+                        modifier = Modifier.weight(1f),
+                    )
+                    VitalsInput(
+                        label = "Height (cm)",
+                        value = height,
+                        onValueChange = { height = it },
+                        keyboardType = KeyboardType.Decimal,
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+            }
+
+            // Notes
+            VitalsSection("Notes (optional)") {
+                OutlinedTextField(
+                    value = notes,
+                    onValueChange = { notes = it },
+                    modifier = Modifier.fillMaxWidth(),
+                    minLines = 3,
+                    shape = RoundedCornerShape(Spacing.md),
+                )
+            }
+
+            Spacer(modifier = Modifier.height(Spacing.xl))
+
+            // Save button
+            Button(
+                onClick = {
+                    scope.launch {
+                        snackbarHostState.showSnackbar("Vitals recorded successfully")
+                        onSaved()
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(52.dp),
+                shape = RoundedCornerShape(Spacing.md),
+                colors = ButtonDefaults.buttonColors(containerColor = Tertiary),
+            ) {
+                Icon(Icons.Default.Check, contentDescription = null)
+                Spacer(modifier = Modifier.width(Spacing.sm))
+                Text(
+                    text = "Save Vitals",
+                    fontWeight = FontWeight.SemiBold,
+                )
+            }
+
+            Spacer(modifier = Modifier.height(Spacing.xxxl))
+        }
+    }
+}
+
+@Composable
+private fun VitalsSection(
+    title: String,
+    content: @Composable () -> Unit,
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = Spacing.md),
+        shape = RoundedCornerShape(Spacing.base),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+    ) {
+        Column(modifier = Modifier.padding(Spacing.base)) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Spacer(modifier = Modifier.height(Spacing.md))
+            content()
+        }
+    }
+}
+
+@Composable
+private fun VitalsInput(
+    label: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    keyboardType: KeyboardType = KeyboardType.Text,
+    modifier: Modifier = Modifier,
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier,
+        label = { Text(label) },
+        keyboardOptions = KeyboardOptions(
+            keyboardType = keyboardType,
+            imeAction = ImeAction.Next,
+        ),
+        singleLine = true,
+        shape = RoundedCornerShape(Spacing.md),
+        colors = OutlinedTextFieldDefaults.colors(
+            unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+        ),
+    )
+}
