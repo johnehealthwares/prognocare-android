@@ -4,6 +4,7 @@ import com.ehealthinformatics.prognocare.data.remote.models.Appointment
 import com.ehealthinformatics.prognocare.data.remote.models.CancelAppointmentDto
 import com.ehealthinformatics.prognocare.data.remote.models.CheckInAppointmentDto
 import com.ehealthinformatics.prognocare.data.remote.models.CreateAppointmentDto
+import com.ehealthinformatics.prognocare.data.remote.models.PaginatedResponse
 import com.ehealthinformatics.prognocare.data.remote.models.UpdateAppointmentDto
 import retrofit2.Response
 import retrofit2.http.Body
@@ -23,7 +24,7 @@ interface AppointmentApi {
         @Query("date") date: String? = null,
         @Query("status") status: String? = null,
         @Query("providerId") providerId: String? = null,
-    ): Response<List<Appointment>>
+    ): Response<PaginatedResponse<Appointment>>
 
     @POST("api/appointments")
     suspend fun create(@Body dto: CreateAppointmentDto): Response<Appointment>

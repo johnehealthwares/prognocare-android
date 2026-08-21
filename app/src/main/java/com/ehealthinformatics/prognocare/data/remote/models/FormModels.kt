@@ -47,15 +47,21 @@ data class PublishFormDto(
 @Serializable
 data class FormSubmission(
     val id: String = "",
+    val submissionNumber: String? = null,
     val formDefinitionId: String = "",
     val formName: String = "",
+    val formVersion: Int = 1,
+    val version: Int = 1,
     val patientId: String = "",
     val visitId: String? = null,
     val encounterId: String? = null,
     val dataJson: JsonElement? = null,
     val status: String = "DRAFT",
-    val version: Int = 1,
+    val submittedById: String? = null,
+    val submittedByName: String? = null,
+    val submittedAt: String? = null,
     val amendmentOf: String? = null,
+    val amendedFromId: String? = null,
     val createdAt: String? = null,
     val updatedAt: String? = null,
 )

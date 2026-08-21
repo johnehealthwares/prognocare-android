@@ -32,9 +32,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -51,20 +56,34 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ehealthinformatics.prognocare.feature.dashboard.specialist.SpecialistDashboardScreen
+import com.ehealthinformatics.prognocare.feature.dashboard.specialist.SpecialistReferralDetailScreen
 import com.ehealthinformatics.prognocare.feature.dashboard.specialist.SpecialistReferralScreen
 import com.ehealthinformatics.prognocare.feature.dashboard.specialist.SpecialistPatientListScreen
 import com.ehealthinformatics.prognocare.feature.dashboard.therapist.TherapistDashboardScreen
+import com.ehealthinformatics.prognocare.feature.dashboard.therapist.TherapistSessionDetailScreen
+import com.ehealthinformatics.prognocare.feature.dashboard.therapist.TherapyPlanScreen
 import com.ehealthinformatics.prognocare.feature.dashboard.therapist.TherapistSessionScreen
 import com.ehealthinformatics.prognocare.feature.dashboard.therapist.TherapistPatientListScreen
 import com.ehealthinformatics.prognocare.feature.dashboard.finance.FinanceDashboardScreen
+import com.ehealthinformatics.prognocare.feature.dashboard.finance.FinanceBillListScreen
 import com.ehealthinformatics.prognocare.feature.dashboard.support.SupportDashboardScreen
+import com.ehealthinformatics.prognocare.feature.dashboard.support.SupportCheckInScreen
+import com.ehealthinformatics.prognocare.feature.dashboard.support.SupportRequestListScreen
 import com.ehealthinformatics.prognocare.feature.dashboard.technician.TechnicianDashboardScreen
+import com.ehealthinformatics.prognocare.feature.dashboard.technician.TechnicianOrdersScreen
+import com.ehealthinformatics.prognocare.feature.dashboard.technician.TechnicianResultsScreen
 import com.ehealthinformatics.prognocare.feature.dashboard.finance.FinanceBillDetailScreen
 import com.ehealthinformatics.prognocare.feature.dashboard.admin.AdminDashboardScreen
+import com.ehealthinformatics.prognocare.feature.dashboard.admin.AdminStaffManagementScreen
 import com.ehealthinformatics.prognocare.feature.auth.LoginScreen
+import com.ehealthinformatics.prognocare.feature.chat.ChatNotificationViewModel
 import com.ehealthinformatics.prognocare.feature.chat.ChatScreen
 import com.ehealthinformatics.prognocare.feature.chat.ConversationListScreen
+import com.ehealthinformatics.prognocare.feature.forms.DynamicFormScreen
+import com.ehealthinformatics.prognocare.feature.forms.FormPickerScreen
 import com.ehealthinformatics.prognocare.feature.dashboard.doctor.DoctorDashboardScreen
+import com.ehealthinformatics.prognocare.feature.dashboard.doctor.DoctorEncounterScreen
+import com.ehealthinformatics.prognocare.feature.dashboard.doctor.DoctorPrescriptionScreen
 import com.ehealthinformatics.prognocare.feature.dashboard.doctor.DoctorAppointmentScreen
 import com.ehealthinformatics.prognocare.feature.dashboard.doctor.DoctorPatientListScreen
 import com.ehealthinformatics.prognocare.feature.dashboard.doctor.DoctorPatientDetailScreen
@@ -74,10 +93,12 @@ import com.ehealthinformatics.prognocare.feature.dashboard.nurse.MedicationAdmin
 import com.ehealthinformatics.prognocare.feature.dashboard.nurse.NurseCheckInScreen
 import com.ehealthinformatics.prognocare.feature.dashboard.nurse.NurseTaskListScreen
 import com.ehealthinformatics.prognocare.feature.dashboard.patient.PatientDashboardScreen
+import com.ehealthinformatics.prognocare.feature.dashboard.patient.PatientAppointmentBookingScreen
 import com.ehealthinformatics.prognocare.feature.dashboard.patient.PatientAppointmentScreen
 import com.ehealthinformatics.prognocare.feature.dashboard.patient.PatientRecordsScreen
 import com.ehealthinformatics.prognocare.feature.dashboard.patient.PatientMedicationsScreen
 import com.ehealthinformatics.prognocare.feature.profile.UserProfileScreen
+import com.ehealthinformatics.prognocare.feature.settings.SettingsScreen
 import com.ehealthinformatics.prognocare.feature.splash.SplashDestination
 import com.ehealthinformatics.prognocare.feature.splash.SplashScreen
 import com.ehealthinformatics.prognocare.feature.splash.SplashViewModel
@@ -141,6 +162,20 @@ val FinanceBottomNav = listOf(
     BottomNavItem(ChatRoutes.CONVERSATIONS, "Chat", Icons.Filled.Chat, Icons.Outlined.Chat),
 )
 
+val TechnicianBottomNav = listOf(
+    BottomNavItem(TechnicianRoutes.DASHBOARD, "Home", Icons.Filled.Home, Icons.Outlined.Home),
+    BottomNavItem(TechnicianRoutes.ORDERS, "Orders", Icons.Filled.ListAlt, Icons.Outlined.ListAlt),
+    BottomNavItem(TechnicianRoutes.RESULTS, "Results", Icons.Filled.CheckCircle, Icons.Outlined.CheckCircle),
+    BottomNavItem(ChatRoutes.CONVERSATIONS, "Chat", Icons.Filled.Chat, Icons.Outlined.Chat),
+)
+
+val SupportBottomNav = listOf(
+    BottomNavItem(SupportRoutes.DASHBOARD, "Home", Icons.Filled.Home, Icons.Outlined.Home),
+    BottomNavItem(SupportRoutes.CHECKIN, "Check-In", Icons.Filled.CheckCircle, Icons.Outlined.CheckCircle),
+    BottomNavItem(SupportRoutes.REQUESTS, "Requests", Icons.Filled.ListAlt, Icons.Outlined.ListAlt),
+    BottomNavItem(ChatRoutes.CONVERSATIONS, "Chat", Icons.Filled.Chat, Icons.Outlined.Chat),
+)
+
 val AdminBottomNav = listOf(
     BottomNavItem(AdminRoutes.DASHBOARD, "Home", Icons.Filled.Home, Icons.Outlined.Home),
     BottomNavItem(AdminRoutes.CHECKIN, "Check-In", Icons.Filled.CheckCircle, Icons.Outlined.CheckCircle),
@@ -154,6 +189,7 @@ fun PrognoCareNavGraph(
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
+    val snackbarHostState = remember { SnackbarHostState() }
 
     // Determine which bottom bar items to show based on current route
     val isDoctorRoute = DoctorBottomNav.any { item ->
@@ -174,10 +210,16 @@ fun PrognoCareNavGraph(
     val isFinanceRoute = FinanceBottomNav.any { item ->
         currentDestination?.hierarchy?.any { it.route == item.route } == true
     }
+    val isTechnicianRoute = TechnicianBottomNav.any { item ->
+        currentDestination?.hierarchy?.any { it.route == item.route } == true
+    }
+    val isSupportRoute = SupportBottomNav.any { item ->
+        currentDestination?.hierarchy?.any { it.route == item.route } == true
+    }
     val isAdminRoute = AdminBottomNav.any { item ->
         currentDestination?.hierarchy?.any { it.route == item.route } == true
     }
-    val showBottomBar = isDoctorRoute || isNurseRoute || isPatientRoute || isSpecialistRoute || isTherapistRoute || isFinanceRoute || isAdminRoute
+    val showBottomBar = isDoctorRoute || isNurseRoute || isPatientRoute || isSpecialistRoute || isTherapistRoute || isFinanceRoute || isTechnicianRoute || isSupportRoute || isAdminRoute
     val currentBottomNavItems = when {
         isDoctorRoute -> DoctorBottomNav
         isNurseRoute -> NurseBottomNav
@@ -185,6 +227,8 @@ fun PrognoCareNavGraph(
         isSpecialistRoute -> SpecialistBottomNav
         isTherapistRoute -> TherapistBottomNav
         isFinanceRoute -> FinanceBottomNav
+        isTechnicianRoute -> TechnicianBottomNav
+        isSupportRoute -> SupportBottomNav
         isAdminRoute -> AdminBottomNav
         else -> emptyList()
     }
@@ -238,7 +282,22 @@ fun PrognoCareNavGraph(
                 }
             }
         },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) { innerPadding ->
+        val chatNotificationViewModel: ChatNotificationViewModel = hiltViewModel()
+        LaunchedEffect(Unit) {
+            chatNotificationViewModel.newMessage.collect { notification ->
+                val result = snackbarHostState.showSnackbar(
+                    message = "New message: ${notification.text}",
+                    actionLabel = "Open",
+                )
+                if (result == SnackbarResult.ActionPerformed) {
+                    navController.navigate(ChatRoutes.conversationDetail(notification.conversationId)) {
+                        launchSingleTop = true
+                    }
+                }
+            }
+        }
         NavHost(
             navController = navController,
             startDestination = Routes.SPLASH,
@@ -315,6 +374,31 @@ fun PrognoCareNavGraph(
                 DoctorPatientDetailScreen(
                     patientId = patientId,
                     onBack = { navController.popBackStack() },
+                    onOpenDocumentation = { pid ->
+                        navController.navigate(FormsRoutes.picker(patientId = pid))
+                    },
+                )
+            }
+
+            composable(
+                route = DoctorRoutes.ENCOUNTER,
+                arguments = listOf(navArgument("encounterId") { type = NavType.StringType }),
+            ) { backStackEntry ->
+                val encounterId = backStackEntry.arguments?.getString("encounterId") ?: return@composable
+                DoctorEncounterScreen(
+                    patientId = encounterId,
+                    onBack = { navController.popBackStack() },
+                    onAddNote = { /* TODO: show add note dialog */ },
+                    onAddDiagnosis = { /* TODO: show add diagnosis dialog */ },
+                    onComplete = { navController.popBackStack() },
+                )
+            }
+
+            composable(DoctorRoutes.REQUESTS) {
+                DoctorPrescriptionScreen(
+                    patientName = "Patient", // TODO: pass from arguments
+                    onBack = { navController.popBackStack() },
+                    onSave = { navController.popBackStack() },
                 )
             }
 
@@ -334,6 +418,54 @@ fun PrognoCareNavGraph(
                 ChatScreen(
                     conversationId = conversationId,
                     onBack = { navController.popBackStack() },
+                )
+            }
+
+            // Dynamic forms
+            composable(
+                route = FormsRoutes.PICKER,
+                arguments = listOf(
+                    navArgument("patientId") { type = NavType.StringType; defaultValue = "" },
+                    navArgument("visitId") { type = NavType.StringType; defaultValue = "" },
+                    navArgument("encounterId") { type = NavType.StringType; defaultValue = "" },
+                ),
+            ) { backStackEntry ->
+                val patientId = backStackEntry.arguments?.getString("patientId").orEmpty()
+                val visitId = backStackEntry.arguments?.getString("visitId").orEmpty().ifEmpty { null }
+                val encounterId = backStackEntry.arguments?.getString("encounterId").orEmpty().ifEmpty { null }
+                FormPickerScreen(
+                    patientId = patientId,
+                    visitId = visitId,
+                    encounterId = encounterId,
+                    onPick = { formId ->
+                        navController.navigate(
+                            FormsRoutes.form(formId, patientId.ifEmpty { null }, visitId, encounterId),
+                        )
+                    },
+                    onBack = { navController.popBackStack() },
+                )
+            }
+
+            composable(
+                route = FormsRoutes.FORM,
+                arguments = listOf(
+                    navArgument("formId") { type = NavType.StringType },
+                    navArgument("patientId") { type = NavType.StringType; defaultValue = "" },
+                    navArgument("visitId") { type = NavType.StringType; defaultValue = "" },
+                    navArgument("encounterId") { type = NavType.StringType; defaultValue = "" },
+                ),
+            ) { backStackEntry ->
+                val formId = backStackEntry.arguments?.getString("formId") ?: return@composable
+                val patientId = backStackEntry.arguments?.getString("patientId").orEmpty()
+                val visitId = backStackEntry.arguments?.getString("visitId").orEmpty().ifEmpty { null }
+                val encounterId = backStackEntry.arguments?.getString("encounterId").orEmpty().ifEmpty { null }
+                DynamicFormScreen(
+                    formId = formId,
+                    patientId = patientId,
+                    visitId = visitId,
+                    encounterId = encounterId,
+                    onBack = { navController.popBackStack() },
+                    onComplete = { navController.popBackStack() },
                 )
             }
 
@@ -392,6 +524,13 @@ fun PrognoCareNavGraph(
                 )
             }
 
+            composable(PatientRoutes.BOOKING) {
+                PatientAppointmentBookingScreen(
+                    onBack = { navController.popBackStack() },
+                    onBook = { navController.popBackStack() },
+                )
+            }
+
             composable(PatientRoutes.RECORDS) {
                 PatientRecordsScreen(
                     onBack = { navController.popBackStack() },
@@ -422,6 +561,23 @@ fun PrognoCareNavGraph(
                 )
             }
 
+            composable(
+                route = SpecialistRoutes.REFERRAL_DETAIL,
+                arguments = listOf(navArgument("referralId") { type = NavType.StringType }),
+            ) { backStackEntry ->
+                val referralId = backStackEntry.arguments?.getString("referralId") ?: return@composable
+                SpecialistReferralDetailScreen(
+                    referralId = referralId,
+                    onBack = { navController.popBackStack() },
+                    onAccept = { navController.popBackStack() },
+                    onReject = { navController.popBackStack() },
+                )
+            }
+
+            composable(SpecialistRoutes.CONSULTATION_NOTES) {
+                // TODO: ConsultationNotesScreen
+            }
+
             composable(SpecialistRoutes.PATIENT_LIST) {
                 SpecialistPatientListScreen(
                     onBack = { navController.popBackStack() },
@@ -447,6 +603,26 @@ fun PrognoCareNavGraph(
                 )
             }
 
+            composable(
+                route = TherapistRoutes.SESSION_DETAIL,
+                arguments = listOf(navArgument("sessionId") { type = NavType.StringType }),
+            ) { backStackEntry ->
+                val sessionId = backStackEntry.arguments?.getString("sessionId") ?: return@composable
+                TherapistSessionDetailScreen(
+                    sessionId = sessionId,
+                    onBack = { navController.popBackStack() },
+                    onComplete = { navController.popBackStack() },
+                )
+            }
+
+            composable(TherapistRoutes.THERAPY_PLAN) {
+                TherapyPlanScreen(
+                    patientName = "Patient", // TODO: pass from arguments
+                    onBack = { navController.popBackStack() },
+                    onSave = { navController.popBackStack() },
+                )
+            }
+
             composable(TherapistRoutes.PATIENT_LIST) {
                 TherapistPatientListScreen(
                     onBack = { navController.popBackStack() },
@@ -467,7 +643,11 @@ fun PrognoCareNavGraph(
             }
 
             composable(FinanceRoutes.BILLS) {
-                // Bills list screen
+                FinanceBillListScreen(
+                    onBack = { navController.popBackStack() },
+                    onBillClick = { billId -> navController.navigate(FinanceRoutes.billDetail(billId)) },
+                    onCreateBill = { /* TODO: create bill screen */ },
+                )
             }
 
             composable(
@@ -510,16 +690,35 @@ fun PrognoCareNavGraph(
             }
 
             composable(AdminRoutes.STAFF) {
-                // Staff management screen
+                AdminStaffManagementScreen(
+                    onBack = { navController.popBackStack() },
+                    onAddStaff = { /* TODO: add staff screen */ },
+                )
             }
 
             // ── Placeholder routes for other roles ────────────
             composable(TechnicianRoutes.DASHBOARD) {
                 TechnicianDashboardScreen(
-                    onNavigateToOrders = { /* TODO: navigate to orders screen */ },
-                    onNavigateToResults = { /* TODO: navigate to results screen */ },
+                    onNavigateToOrders = {
+                        navController.navigate(TechnicianRoutes.ORDERS) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+                    onNavigateToResults = {
+                        navController.navigate(TechnicianRoutes.RESULTS) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
                     onNavigateToChat = {
-                        navController.navigate("chat/conversations") {
+                        navController.navigate(ChatRoutes.CONVERSATIONS) {
                             popUpTo(navController.graph.findStartDestination().id) {
                                 saveState = true
                             }
@@ -532,14 +731,43 @@ fun PrognoCareNavGraph(
                     },
                 )
             }
+
+            composable(TechnicianRoutes.ORDERS) {
+                TechnicianOrdersScreen(
+                    onBack = { navController.popBackStack() },
+                )
+            }
+
+            composable(TechnicianRoutes.RESULTS) {
+                TechnicianResultsScreen(
+                    onBack = { navController.popBackStack() },
+                )
+            }
             composable(SupportRoutes.DASHBOARD) {
-                val navBackStackEntry = rememberNavController() // reuses outer navController
                 SupportDashboardScreen(
-                    onNavigateToCheckIn = { /* TODO: navigate to check-in screen */ },
-                    onNavigateToRequests = { /* TODO: navigate to requests screen */ },
-                    onNavigateToPatientLookup = { /* TODO: navigate to patient lookup */ },
+                    onNavigateToCheckIn = {
+                        navController.navigate(SupportRoutes.CHECKIN) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+                    onNavigateToRequests = {
+                        navController.navigate(SupportRoutes.REQUESTS) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+                    onNavigateToPatientLookup = {
+                        // TODO: Add patient lookup route
+                    },
                     onNavigateToChat = {
-                        navController.navigate("chat/conversations") {
+                        navController.navigate(ChatRoutes.CONVERSATIONS) {
                             popUpTo(navController.graph.findStartDestination().id) {
                                 saveState = true
                             }
@@ -550,6 +778,18 @@ fun PrognoCareNavGraph(
                     onNavigateToProfile = {
                         navController.navigate(ProfileRoutes.PROFILE)
                     },
+                )
+            }
+
+            composable(SupportRoutes.CHECKIN) {
+                SupportCheckInScreen(
+                    onBack = { navController.popBackStack() },
+                )
+            }
+
+            composable(SupportRoutes.REQUESTS) {
+                SupportRequestListScreen(
+                    onBack = { navController.popBackStack() },
                 )
             }
 
@@ -562,6 +802,16 @@ fun PrognoCareNavGraph(
                             popUpTo(0) { inclusive = true }
                         }
                     },
+                    onOpenServerSettings = {
+                        navController.navigate(Routes.SETTINGS)
+                    },
+                )
+            }
+
+            // Server settings (shared across all roles)
+            composable(Routes.SETTINGS) {
+                SettingsScreen(
+                    onBack = { navController.popBackStack() },
                 )
             }
         }

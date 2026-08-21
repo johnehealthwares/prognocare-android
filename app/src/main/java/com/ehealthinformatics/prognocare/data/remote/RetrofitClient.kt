@@ -1,13 +1,25 @@
 package com.ehealthinformatics.prognocare.data.remote
 
+import com.ehealthinformatics.prognocare.data.config.AppConfigStore
 import com.ehealthinformatics.prognocare.data.remote.api.AppointmentApi
 import com.ehealthinformatics.prognocare.data.remote.api.DashboardApi
 import com.ehealthinformatics.prognocare.data.remote.api.EncounterApi
 import com.ehealthinformatics.prognocare.data.remote.api.FormApi
+import com.ehealthinformatics.prognocare.data.remote.api.HealthApi
+import com.ehealthinformatics.prognocare.data.remote.api.LocationApi
 import com.ehealthinformatics.prognocare.data.remote.api.PatientApi
+import com.ehealthinformatics.prognocare.data.remote.api.PaymentProviderApi
 import com.ehealthinformatics.prognocare.data.remote.api.RequestApi
 import com.ehealthinformatics.prognocare.data.remote.api.StaffApi
 import com.ehealthinformatics.prognocare.data.remote.api.VisitApi
+import com.ehealthinformatics.prognocare.data.remote.api.AuthApi
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -18,49 +30,75 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * All Retrofit API services bound to the current EMR base URL.
+ */
+data class ApiBundle(
+    val patientApi: PatientApi,
+    val staffApi: StaffApi,
+    val appointmentApi: AppointmentApi,
+    val visitApi: VisitApi,
+    val encounterApi: EncounterApi,
+    val requestApi: RequestApi,
+    val formApi: FormApi,
+    val dashboardApi: DashboardApi,
+    val paymentProviderApi: PaymentProviderApi,
+    val locationApi: LocationApi,
+    val healthApi: HealthApi,
+    val authApi: AuthApi,
+)
+
 @Singleton
 class RetrofitClient @Inject constructor(
     private val authInterceptor: AuthInterceptor,
+    private val configStore: AppConfigStore,
 ) {
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+
     private val json = Json {
         ignoreUnknownKeys = true
         encodeDefaults = true
         isLenient = true
     }
 
-    private val okHttpClient: OkHttpClient by lazy {
-        OkHttpClient.Builder()
-            .addInterceptor(authInterceptor)
-            .addInterceptor(
-                HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.BODY
-                }
-            )
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
-            .build()
+    private fun buildHttpClient(): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(authInterceptor)
+        .addInterceptor(
+            HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            }
+        )
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .writeTimeout(30, TimeUnit.SECONDS)
+        .build()
+
+    private fun buildRetrofit(baseUrl: String): Retrofit = Retrofit.Builder()
+        .baseUrl(baseUrl)
+        .client(buildHttpClient())
+        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+        .build()
+
+    private fun buildBundle(baseUrl: String): ApiBundle {
+        val retrofit = buildRetrofit(baseUrl)
+        return ApiBundle(
+            patientApi = retrofit.create(PatientApi::class.java),
+            staffApi = retrofit.create(StaffApi::class.java),
+            appointmentApi = retrofit.create(AppointmentApi::class.java),
+            visitApi = retrofit.create(VisitApi::class.java),
+            encounterApi = retrofit.create(EncounterApi::class.java),
+            requestApi = retrofit.create(RequestApi::class.java),
+            formApi = retrofit.create(FormApi::class.java),
+            dashboardApi = retrofit.create(DashboardApi::class.java),
+            paymentProviderApi = retrofit.create(PaymentProviderApi::class.java),
+            locationApi = retrofit.create(LocationApi::class.java),
+            healthApi = retrofit.create(HealthApi::class.java),
+            authApi = retrofit.create(AuthApi::class.java),
+        )
     }
 
-    private val retrofit: Retrofit by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .client(okHttpClient)
-            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
-            .build()
-    }
-
-    val patientApi: PatientApi by lazy { retrofit.create(PatientApi::class.java) }
-    val staffApi: StaffApi by lazy { retrofit.create(StaffApi::class.java) }
-    val appointmentApi: AppointmentApi by lazy { retrofit.create(AppointmentApi::class.java) }
-    val visitApi: VisitApi by lazy { retrofit.create(VisitApi::class.java) }
-    val encounterApi: EncounterApi by lazy { retrofit.create(EncounterApi::class.java) }
-    val requestApi: RequestApi by lazy { retrofit.create(RequestApi::class.java) }
-    val formApi: FormApi by lazy { retrofit.create(FormApi::class.java) }
-    val dashboardApi: DashboardApi by lazy { retrofit.create(DashboardApi::class.java) }
-
-    companion object {
-        // TODO: Move to BuildConfig or remote config
-        var BASE_URL = "http://10.0.2.2:3000/"  // Android emulator localhost
-    }
+    /** Current API bundle, rebuilt whenever the EMR base URL config changes. */
+    val apis: StateFlow<ApiBundle> = configStore.config
+        .map { config -> buildBundle(config.emrBaseUrl) }
+        .stateIn(scope, SharingStarted.Eagerly, buildBundle(AppConfigStore.DEFAULT_EMR_URL))
 }

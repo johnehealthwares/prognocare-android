@@ -19,6 +19,22 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField(
+            "String",
+            "DEFAULT_EMR_URL",
+            "\"${System.getenv("RXSOFT_EMR_URL") ?: "http://10.0.2.2:8093/"}\""
+        )
+        buildConfigField(
+            "String",
+            "DEFAULT_CONVERSATION_URL",
+            "\"${System.getenv("RXSOFT_CONVERSATION_URL") ?: "http://10.0.2.2:8090/api"}\""
+        )
+        buildConfigField(
+            "String",
+            "DEFAULT_WEB_CHANNEL_ID",
+            "\"69bd061c11bf835d976c4e2f\""
+        )
     }
 
     buildTypes {
@@ -39,6 +55,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -83,8 +100,12 @@ dependencies {
     implementation(libs.okhttp.logging)
     implementation(libs.kotlinx.serialization)
 
+    // Socket.IO
+    implementation(libs.socketio.client)
+
     // Testing
     testImplementation(libs.junit)
+    testImplementation(libs.mockwebserver)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }

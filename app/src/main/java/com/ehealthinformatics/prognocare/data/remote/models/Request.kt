@@ -3,8 +3,34 @@ package com.ehealthinformatics.prognocare.data.remote.models
 import kotlinx.serialization.Serializable
 
 @Serializable
+data class RequestItem(
+    val id: String? = null,
+    val requestId: String? = null,
+    val name: String = "",
+    val code: String? = null,
+    val dose: String? = null,
+    val doseUnit: String? = null,
+    val frequency: String? = null,
+    val route: String? = null,
+    val duration: String? = null,
+    val durationUnit: String? = null,
+    val quantity: Int? = null,
+    val instructions: String? = null,
+    val testDefinitionId: String? = null,
+    val sampleType: String? = null,
+    val specimenNotes: String? = null,
+    val modality: String? = null,
+    val bodyPart: String? = null,
+    val contrast: Boolean = false,
+    val clinicalIndication: String? = null,
+    val category: String? = null,
+    val notes: String? = null,
+)
+
+@Serializable
 data class ClinicalRequest(
     val id: String = "",
+    val requestNumber: String? = null,
     val patientId: String = "",
     val patientName: String = "",
     val encounterId: String? = null,
@@ -17,8 +43,10 @@ data class ClinicalRequest(
     val diagnosis: String? = null,
     val clinicalNotes: String? = null,
     val requestedAt: String? = null,
-    val items: List<String> = emptyList(),
+    val completedAt: String? = null,
+    val items: List<RequestItem> = emptyList(),
     val syncStatus: String? = null,
+    val syncError: String? = null,
     val externalOrderId: String? = null,
     val externalReference: String? = null,
     val createdAt: String? = null,
@@ -53,7 +81,7 @@ data class CreateRequestDto(
     val diagnosis: String? = null,
     val clinicalNotes: String? = null,
     val requestedAt: String? = null,
-    val items: List<String> = emptyList(),
+    val items: List<RequestItem> = emptyList(),
 )
 
 @Serializable
@@ -67,7 +95,7 @@ data class UpdateRequestDto(
     val orderingProviderName: String? = null,
     val diagnosis: String? = null,
     val clinicalNotes: String? = null,
-    val items: List<String>? = null,
+    val items: List<RequestItem>? = null,
 )
 
 @Serializable

@@ -2,7 +2,9 @@ package com.ehealthinformatics.prognocare.data.remote.api
 
 import com.ehealthinformatics.prognocare.data.remote.models.CreateVisitDto
 import com.ehealthinformatics.prognocare.data.remote.models.EndVisitDto
+import com.ehealthinformatics.prognocare.data.remote.models.PaginatedResponse
 import com.ehealthinformatics.prognocare.data.remote.models.Visit
+import com.ehealthinformatics.prognocare.data.remote.models.UpdateVisitDto
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -20,7 +22,7 @@ interface VisitApi {
         @Query("limit") limit: Int = 20,
         @Query("status") status: String? = null,
         @Query("providerId") providerId: String? = null,
-    ): Response<List<Visit>>
+    ): Response<PaginatedResponse<Visit>>
 
     @POST("api/visits")
     suspend fun create(@Body dto: CreateVisitDto): Response<Visit>
@@ -34,7 +36,7 @@ interface VisitApi {
     @PATCH("api/visits/{id}")
     suspend fun update(
         @Path("id") id: String,
-        @Body dto: CreateVisitDto,
+        @Body dto: UpdateVisitDto,
     ): Response<Visit>
 
     @DELETE("api/visits/{id}")

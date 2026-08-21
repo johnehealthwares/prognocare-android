@@ -1,6 +1,7 @@
 package com.ehealthinformatics.prognocare.data.remote.api
 
 import com.ehealthinformatics.prognocare.data.remote.models.CreatePatientDto
+import com.ehealthinformatics.prognocare.data.remote.models.PaginatedResponse
 import com.ehealthinformatics.prognocare.data.remote.models.Patient
 import com.ehealthinformatics.prognocare.data.remote.models.UpdatePatientDto
 import retrofit2.Response
@@ -22,7 +23,7 @@ interface PatientApi {
         @Query("sortBy") sortBy: String = "createdAt",
         @Query("sortOrder") sortOrder: String = "desc",
         @Query("filter") filter: String? = null,
-    ): Response<List<Patient>>
+    ): Response<PaginatedResponse<Patient>>
 
     @POST("api/patients")
     suspend fun create(@Body dto: CreatePatientDto): Response<Patient>

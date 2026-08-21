@@ -3,6 +3,7 @@ package com.ehealthinformatics.prognocare.data.remote.api
 import com.ehealthinformatics.prognocare.data.remote.models.AddRequestNoteDto
 import com.ehealthinformatics.prognocare.data.remote.models.ClinicalRequest
 import com.ehealthinformatics.prognocare.data.remote.models.CreateRequestDto
+import com.ehealthinformatics.prognocare.data.remote.models.PaginatedResponse
 import com.ehealthinformatics.prognocare.data.remote.models.RequestHistoryEntry
 import com.ehealthinformatics.prognocare.data.remote.models.SyncRequestDto
 import com.ehealthinformatics.prognocare.data.remote.models.TransitionRequestStatusDto
@@ -27,7 +28,7 @@ interface RequestApi {
         @Query("encounterId") encounterId: String? = null,
         @Query("requestType") requestType: String? = null,
         @Query("status") status: String? = null,
-    ): Response<List<ClinicalRequest>>
+    ): Response<PaginatedResponse<ClinicalRequest>>
 
     @POST("api/requests")
     suspend fun create(@Body dto: CreateRequestDto): Response<ClinicalRequest>

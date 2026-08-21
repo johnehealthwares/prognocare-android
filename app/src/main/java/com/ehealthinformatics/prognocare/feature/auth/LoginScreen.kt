@@ -42,6 +42,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,7 +53,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -63,26 +63,48 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.Image
 import androidx.compose.ui.res.painterResource
+import androidx.compose.runtime.collectAsState
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.ehealthinformatics.prognocare.R
 import com.ehealthinformatics.prognocare.designsystem.theme.AppThemeColors
 import com.ehealthinformatics.prognocare.designsystem.theme.Primary
 import com.ehealthinformatics.prognocare.designsystem.theme.PrimaryDark
 import com.ehealthinformatics.prognocare.designsystem.theme.Spacing
-import com.ehealthinformatics.prognocare.feature.splash.SplashViewModel
+import com.ehealthinformatics.prognocare.feature.settings.ServerConfigContent
+import com.ehealthinformatics.prognocare.feature.settings.SettingsViewModel
+import com.ehealthinformatics.prognocare.feature.settings.TapCounter
 import com.ehealthinformatics.prognocare.navigation.UserRole
 
 @Composable
 fun LoginScreen(
     onLoginSuccess: (UserRole) -> Unit,
+    settingsViewModel: SettingsViewModel = hiltViewModel(),
+    loginViewModel: LoginViewModel = hiltViewModel(),
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
-    var isLoading by remember { mutableStateOf(false) }
+    val isLoading by loginViewModel.state.collectAsState()
     var selectedRole by remember { mutableStateOf(UserRole.Doctor) }
+    var configRevealed by remember { mutableStateOf(false) }
+    val tapCounter = remember { TapCounter() }
+    val config by settingsViewModel.config.collectAsState()
+    val isVerifying by settingsViewModel.isVerifying.collectAsState()
+    val saveResult by settingsViewModel.saveResult.collectAsState()
+    var loginError by remember { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(loginViewModel.state) {
+        when (val s = loginViewModel.state.value) {
+            is LoginState.Success -> {
+                onLoginSuccess(s.role)
+                loginViewModel.reset()
+            }
+            is LoginState.Error -> loginError = s.message
+            else -> Unit
+        }
+    }
 
     val focusManager = LocalFocusManager.current
-    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -102,7 +124,11 @@ fun LoginScreen(
                             PrimaryDark,
                         )
                     )
-                ),
+                )
+                .clickable {
+                    tapCounter.onTap()
+                    configRevealed = tapCounter.revealed
+                },
             contentAlignment = Alignment.Center,
         ) {
             Column(
@@ -220,9 +246,8 @@ fun LoginScreen(
                 keyboardActions = KeyboardActions(
                     onDone = {
                         focusManager.clearFocus()
-                        isLoading = true
-                        SplashViewModel.saveAuthState(context, selectedRole)
-                        onLoginSuccess(selectedRole)
+                        loginError = null
+                        loginViewModel.login(email, password)
                     },
                 ),
                 singleLine = true,
@@ -236,7 +261,7 @@ fun LoginScreen(
             )
             Spacer(modifier = Modifier.height(Spacing.sm))
 
-            TextButton(
+                TextButton(
                 onClick = { /* TODO: forgot password */ },
                 modifier = Modifier.align(Alignment.End),
             ) {
@@ -244,6 +269,16 @@ fun LoginScreen(
                     text = "Forgot password?",
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary,
+                )
+            }
+            if (loginError != null) {
+                Spacer(modifier = Modifier.height(Spacing.sm))
+                Text(
+                    text = loginError!!,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.error,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
             Spacer(modifier = Modifier.height(Spacing.lg))
@@ -345,14 +380,13 @@ fun LoginScreen(
             // ── Login Button ─────────────────────────────────
             Button(
                 onClick = {
-                    isLoading = true
-                    SplashViewModel.saveAuthState(context, selectedRole)
-                    onLoginSuccess(selectedRole)
+                    loginError = null
+                    loginViewModel.login(email, password)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
-                enabled = !isLoading,
+                enabled = isLoading !is LoginState.Loading,
                 shape = RoundedCornerShape(Spacing.md),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary,
@@ -360,7 +394,7 @@ fun LoginScreen(
                 ),
             ) {
                 AnimatedVisibility(
-                    visible = isLoading,
+                    visible = isLoading is LoginState.Loading,
                     enter = fadeIn(),
                     exit = fadeOut(),
                 ) {
@@ -371,7 +405,7 @@ fun LoginScreen(
                     )
                 }
                 AnimatedVisibility(
-                    visible = !isLoading,
+                    visible = isLoading !is LoginState.Loading,
                     enter = fadeIn(),
                     exit = fadeOut(),
                 ) {
@@ -440,6 +474,18 @@ fun LoginScreen(
             }
 
             Spacer(modifier = Modifier.height(Spacing.xxl))
+
+            AnimatedVisibility(visible = configRevealed, enter = fadeIn(), exit = fadeOut()) {
+                ServerConfigContent(
+                    config = config,
+                    onSave = { emr, conv, channel ->
+                        settingsViewModel.saveConfig(emr, conv, channel)
+                    },
+                    onReset = { settingsViewModel.resetToDefaults() },
+                    isVerifying = isVerifying,
+                    saveResult = saveResult,
+                )
+            }
         }
     }
 }

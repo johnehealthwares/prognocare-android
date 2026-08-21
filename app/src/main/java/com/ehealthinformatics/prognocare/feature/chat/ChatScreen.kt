@@ -1,6 +1,6 @@
 package com.ehealthinformatics.prognocare.feature.chat
 
-import android.content.Context
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -18,13 +17,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Attachment
 import androidx.compose.material.icons.filled.MedicalServices
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,6 +35,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,69 +44,57 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.ehealthinformatics.prognocare.data.remote.models.ConversationInboxItem
+import com.ehealthinformatics.prognocare.data.remote.models.ExchangeMessage
 import com.ehealthinformatics.prognocare.designsystem.theme.Spacing
-import com.ehealthinformatics.prognocare.navigation.UserRole
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatScreen(
     conversationId: String,
+    conversation: ConversationInboxItem? = null,
     onBack: () -> Unit,
+    viewModel: ChatViewModel = hiltViewModel(),
 ) {
     var messageText by remember { mutableStateOf("") }
-    val context = LocalContext.current
-    
-    // Get user role from shared preferences
-    val userRole = remember {
-        val prefs = context.getSharedPreferences("prognocare_auth", Context.MODE_PRIVATE)
-        val roleOrdinal = prefs.getInt("user_role", 0)
-        UserRole.entries.getOrNull(roleOrdinal) ?: UserRole.Doctor
+    val messagesMap by viewModel.messagesByConversation.collectAsStateWithLifecycle()
+    val messages = remember(messagesMap, conversationId) {
+        messagesMap[conversationId].orEmpty()
     }
-    
-    val conversations = remember(userRole) { getConversationsForRole(userRole) }
-    val conversation = remember(conversationId, conversations) {
-        conversations.find { it.id == conversationId } ?: conversations.first()
+
+    LaunchedEffect(conversationId) {
+        viewModel.loadMessages(conversationId)
     }
+
+    DisposableEffect(conversationId) {
+        onDispose {
+            viewModel.onClearedConversation(conversationId)
+        }
+    }
+
+    val participantName = conversation?.participantName ?: "Conversation"
+    val participantInitials = conversation?.participantInitials ?: conversationId.take(2).uppercase()
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Box(
-                            modifier = Modifier
-                                .size(36.dp)
-                                .clip(CircleShape)
-                                .background(MaterialTheme.colorScheme.primaryContainer),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            Text(
-                                text = conversation.avatarText,
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                fontWeight = FontWeight.Bold,
-                            )
-                        }
-                        Spacer(modifier = Modifier.width(Spacing.sm))
-                        Column {
-                            Text(
-                                text = conversation.title,
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.SemiBold,
-                            )
-                            Text(
-                                text = if (conversation.isOnline) "Online" else "Offline",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = if (conversation.isOnline) {
-                                    MaterialTheme.colorScheme.tertiary
-                                } else {
-                                    MaterialTheme.colorScheme.onSurfaceVariant
-                                },
-                            )
-                        }
+                    Column {
+                        Text(
+                            text = participantName,
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.SemiBold,
+                            maxLines = 1,
+                        )
+                        Text(
+                            text = conversation?.status ?: "ACTIVE",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
                     }
                 },
                 navigationIcon = {
@@ -135,7 +124,6 @@ fun ChatScreen(
                 .imePadding(),
         ) {
             // Messages
-            val messages = remember(conversationId, userRole) { getMessagesForConversation(conversationId, userRole) }
             LazyColumn(
                 modifier = Modifier.weight(1f),
                 contentPadding = PaddingValues(
@@ -144,8 +132,13 @@ fun ChatScreen(
                 ),
                 verticalArrangement = Arrangement.spacedBy(Spacing.sm),
             ) {
-                items(messages) { message ->
-                    ChatBubble(message = message)
+                items(messages, key = { it.id.ifEmpty { "${it.createdAt}-${it.text}" } }) { message ->
+                    ChatBubble(
+                        message = message,
+                        onOptionSelect = { value ->
+                            viewModel.sendMessage(conversationId, value)
+                        },
+                    )
                 }
             }
 
@@ -184,6 +177,7 @@ fun ChatScreen(
                 IconButton(
                     onClick = {
                         if (messageText.isNotBlank()) {
+                            viewModel.sendMessage(conversationId, messageText.trim())
                             messageText = ""
                         }
                     },
@@ -204,91 +198,97 @@ fun ChatScreen(
 }
 
 @Composable
-private fun ChatBubble(message: ChatMessage) {
-    val isMe = message.isMe
+private fun ChatBubble(
+    message: ExchangeMessage,
+    onOptionSelect: (String) -> Unit,
+) {
+    val isMe = message.direction == "inbound"
+    val parsed = if (!isMe) ChatOptionParser.parse(message.text) else null
 
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = if (isMe) Arrangement.End else Arrangement.Start,
     ) {
-        if (!isMe) {
-            Box(
-                modifier = Modifier
-                    .size(32.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.secondaryContainer),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    text = message.senderName.take(2),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSecondaryContainer,
-                    fontWeight = FontWeight.Bold,
-                )
-            }
-            Spacer(modifier = Modifier.width(Spacing.sm))
-        }
-
         Column(
-            modifier = Modifier.width(280.dp),
+            modifier = Modifier.width(320.dp),
             horizontalAlignment = if (isMe) Alignment.End else Alignment.Start,
         ) {
-            if (!isMe) {
-                Text(
-                    text = message.senderName,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier.padding(bottom = Spacing.xxs),
-                )
-            }
-            Box(
-                modifier = Modifier
-                    .clip(
-                        RoundedCornerShape(
-                            topStart = if (isMe) 16.dp else 4.dp,
-                            topEnd = if (isMe) 4.dp else 16.dp,
-                            bottomStart = 16.dp,
-                            bottomEnd = 16.dp,
+            if (parsed != null) {
+                OptionCard(parsed = parsed, onOptionSelect = onOptionSelect)
+            } else {
+                Box(
+                    modifier = Modifier
+                        .clip(
+                            RoundedCornerShape(
+                                topStart = if (isMe) 16.dp else 4.dp,
+                                topEnd = if (isMe) 4.dp else 16.dp,
+                                bottomStart = 16.dp,
+                                bottomEnd = 16.dp,
+                            )
                         )
+                        .background(
+                            if (isMe) MaterialTheme.colorScheme.primary
+                            else MaterialTheme.colorScheme.surfaceVariant,
+                        )
+                        .padding(Spacing.md),
+                ) {
+                    Text(
+                        text = message.text,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = if (isMe) MaterialTheme.colorScheme.onPrimary
+                        else MaterialTheme.colorScheme.onSurfaceVariant,
                     )
-                    .background(
-                        if (isMe) MaterialTheme.colorScheme.primary
-                        else MaterialTheme.colorScheme.surfaceVariant,
-                    )
-                    .padding(Spacing.md),
-            ) {
-                Text(
-                    text = message.text,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = if (isMe) MaterialTheme.colorScheme.onPrimary
-                    else MaterialTheme.colorScheme.onSurfaceVariant,
-                )
+                }
             }
             Text(
-                text = message.timestamp,
+                text = message.createdAt.toDisplayTime(),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(top = Spacing.xxs),
             )
         }
+    }
+}
 
-        if (isMe) {
-            Spacer(modifier = Modifier.width(Spacing.sm))
-            Box(
-                modifier = Modifier
-                    .size(32.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primaryContainer),
-                contentAlignment = Alignment.Center,
+@Composable
+private fun OptionCard(
+    parsed: ParsedQuestionOptions,
+    onOptionSelect: (String) -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                MaterialTheme.colorScheme.surface,
+                RoundedCornerShape(Spacing.md),
+            )
+            .padding(Spacing.md),
+        verticalArrangement = Arrangement.spacedBy(Spacing.sm),
+    ) {
+        Text(
+            text = parsed.title,
+            style = MaterialTheme.typography.titleSmall,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onSurface,
+        )
+        parsed.options.forEach { option ->
+            ElevatedButton(
+                onClick = { onOptionSelect(option.value) },
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(Spacing.md),
             ) {
-                Text(
-                    text = message.senderName.take(2),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    fontWeight = FontWeight.Bold,
-                )
+                Text(option.label)
             }
         }
+    }
+}
+
+private fun String.toDisplayTime(): String {
+    return try {
+        val parsed = java.time.OffsetDateTime.parse(this)
+        val local = parsed.toLocalTime()
+        String.format("%02d:%02d", local.hour, local.minute)
+    } catch (e: Exception) {
+        this
     }
 }

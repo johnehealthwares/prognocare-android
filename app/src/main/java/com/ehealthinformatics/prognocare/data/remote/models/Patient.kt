@@ -4,6 +4,12 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+data class Identifier(
+    val type: String = "",
+    val value: String = "",
+)
+
+@Serializable
 data class Patient(
     val id: String = "",
     val patientId: String = "",
@@ -18,11 +24,12 @@ data class Patient(
     val nextOfKinName: String? = null,
     val nextOfKinPhone: String? = null,
     val nextOfKinRelationship: String? = null,
-    val identifiers: List<String> = emptyList(),
+    val identifiers: List<Identifier> = emptyList(),
     val maritalStatus: String? = null,
     val occupation: String? = null,
     val bloodGroup: String? = null,
     val genotype: String? = null,
+    val paymentProviderIds: List<String> = emptyList(),
     val isActive: Boolean = true,
     val createdAt: String? = null,
     val updatedAt: String? = null,
@@ -51,11 +58,12 @@ data class CreatePatientDto(
     val nextOfKinName: String? = null,
     val nextOfKinPhone: String? = null,
     val nextOfKinRelationship: String? = null,
-    val identifiers: List<String>? = null,
+    val identifiers: List<Identifier>? = null,
     val maritalStatus: String? = null,
     val occupation: String? = null,
     val bloodGroup: String? = null,
     val genotype: String? = null,
+    val paymentProviderIds: List<String>? = null,
 )
 
 @Serializable
@@ -71,7 +79,7 @@ data class UpdatePatientDto(
     val nextOfKinName: String? = null,
     val nextOfKinPhone: String? = null,
     val nextOfKinRelationship: String? = null,
-    val identifiers: List<String>? = null,
+    val identifiers: List<Identifier>? = null,
     val maritalStatus: String? = null,
     val occupation: String? = null,
     val bloodGroup: String? = null,

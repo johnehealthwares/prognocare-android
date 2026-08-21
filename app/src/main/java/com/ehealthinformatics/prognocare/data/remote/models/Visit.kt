@@ -15,6 +15,8 @@ data class Visit(
     val appointmentId: String? = null,
     val startDatetime: String? = null,
     val stopDatetime: String? = null,
+    val visitNumber: String? = null,
+    val createdById: String? = null,
     val createdAt: String? = null,
     val updatedAt: String? = null,
 ) {
@@ -22,6 +24,18 @@ data class Visit(
     val typeDisplay: String
         get() = visitType.replace("_", " ").lowercase().replaceFirstChar { it.uppercase() }
 }
+
+@Serializable
+data class UpdateVisitDto(
+    val patientId: String? = null,
+    val patientName: String? = null,
+    val visitType: String? = null,
+    val status: String? = null,
+    val providerId: String? = null,
+    val providerName: String? = null,
+    val locationId: String? = null,
+    val stopDatetime: String? = null,
+)
 
 @Serializable
 data class CreateVisitDto(

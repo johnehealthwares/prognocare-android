@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Appointment(
     val id: String = "",
+    val appointmentNumber: String? = null,
     val patientId: String = "",
     val patientName: String = "",
     val appointmentType: String = "",
@@ -14,6 +15,8 @@ data class Appointment(
     val providerId: String? = null,
     val providerName: String? = null,
     val locationId: String? = null,
+    val scheduleLocation: String? = null,
+    val visitId: String? = null,
     val priority: String = "ROUTINE",
     val status: String = "SCHEDULED",
     val reason: String? = null,

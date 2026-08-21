@@ -1,8 +1,11 @@
 package com.ehealthinformatics.prognocare.data.remote.api
 
 import com.ehealthinformatics.prognocare.data.remote.models.CreateEncounterDto
+import com.ehealthinformatics.prognocare.data.remote.models.CreateEncounterRequestDto
 import com.ehealthinformatics.prognocare.data.remote.models.Encounter
+import com.ehealthinformatics.prognocare.data.remote.models.PaginatedResponse
 import com.ehealthinformatics.prognocare.data.remote.models.UpdateEncounterDto
+import com.ehealthinformatics.prognocare.data.remote.models.ClinicalRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -20,7 +23,7 @@ interface EncounterApi {
         @Query("limit") limit: Int = 20,
         @Query("patientId") patientId: String? = null,
         @Query("visitId") visitId: String? = null,
-    ): Response<List<Encounter>>
+    ): Response<PaginatedResponse<Encounter>>
 
     @POST("api/encounters")
     suspend fun create(@Body dto: CreateEncounterDto): Response<Encounter>
@@ -36,4 +39,10 @@ interface EncounterApi {
 
     @DELETE("api/encounters/{id}")
     suspend fun delete(@Path("id") id: String): Response<Unit>
+
+    @POST("api/encounters/{id}/requests")
+    suspend fun createRequest(
+        @Path("id") id: String,
+        @Body dto: CreateEncounterRequestDto,
+    ): Response<ClinicalRequest>
 }

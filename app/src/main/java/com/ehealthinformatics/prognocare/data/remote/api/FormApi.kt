@@ -4,6 +4,7 @@ import com.ehealthinformatics.prognocare.data.remote.models.CreateFormDefinition
 import com.ehealthinformatics.prognocare.data.remote.models.CreateFormSubmissionDto
 import com.ehealthinformatics.prognocare.data.remote.models.FormDefinition
 import com.ehealthinformatics.prognocare.data.remote.models.FormSubmission
+import com.ehealthinformatics.prognocare.data.remote.models.PaginatedResponse
 import com.ehealthinformatics.prognocare.data.remote.models.PublishFormDto
 import com.ehealthinformatics.prognocare.data.remote.models.UpdateFormDefinitionDto
 import com.ehealthinformatics.prognocare.data.remote.models.UpdateFormSubmissionDto
@@ -24,7 +25,7 @@ interface FormApi {
     suspend fun listDefinitions(
         @Query("page") page: Int = 1,
         @Query("limit") limit: Int = 20,
-    ): Response<List<FormDefinition>>
+    ): Response<PaginatedResponse<FormDefinition>>
 
     @POST("api/form-definitions")
     suspend fun createDefinition(@Body dto: CreateFormDefinitionDto): Response<FormDefinition>
@@ -60,7 +61,7 @@ interface FormApi {
         @Query("visitId") visitId: String? = null,
         @Query("encounterId") encounterId: String? = null,
         @Query("formDefinitionId") formDefinitionId: String? = null,
-    ): Response<List<FormSubmission>>
+    ): Response<PaginatedResponse<FormSubmission>>
 
     @POST("api/form-submissions")
     suspend fun createSubmission(@Body dto: CreateFormSubmissionDto): Response<FormSubmission>
@@ -92,5 +93,5 @@ interface FormApi {
     // ── Available Forms ───────────────────────────────────────
 
     @GET("api/forms/available")
-    suspend fun availableForms(): Response<List<FormDefinition>>
+    suspend fun availableForms(): Response<PaginatedResponse<FormDefinition>>
 }

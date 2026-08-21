@@ -44,6 +44,18 @@ data class UpdateEncounterDto(
     val notes: String? = null,
 )
 
+@Serializable
+data class CreateEncounterRequestDto(
+    val requestType: String,
+    val priority: String = "ROUTINE",
+    val orderingProviderId: String? = null,
+    val orderingProviderName: String? = null,
+    val diagnosis: String? = null,
+    val clinicalNotes: String? = null,
+    val requestedAt: String? = null,
+    val items: List<String> = emptyList(),
+)
+
 enum class EncounterType {
     CONSULTATION, VITALS, HISTORY_AND_PHYSICAL, CLINICAL_NOTE,
     LAB_RESULTS, DISCHARGE, PROCEDURE, ADMISSION, OTHER,

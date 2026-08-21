@@ -18,12 +18,14 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MedicalServices
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -53,6 +55,7 @@ import com.ehealthinformatics.prognocare.designsystem.theme.Spacing
 fun DoctorPatientDetailScreen(
     patientId: String,
     onBack: () -> Unit,
+    onOpenDocumentation: ((String) -> Unit)? = null,
 ) {
     var selectedTab by remember { mutableIntStateOf(0) }
     val tabs = listOf("Overview", "Encounters", "Requests", "Records")
@@ -81,6 +84,17 @@ fun DoctorPatientDetailScreen(
                     containerColor = MaterialTheme.colorScheme.surface,
                 ),
             )
+        },
+        floatingActionButton = {
+            if (onOpenDocumentation != null) {
+                ExtendedFloatingActionButton(
+                    onClick = { onOpenDocumentation(patientId) },
+                    icon = { Icon(Icons.Filled.Description, contentDescription = null) },
+                    text = { Text("Documentation") },
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                )
+            }
         },
     ) { innerPadding ->
         Column(

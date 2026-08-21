@@ -1,6 +1,7 @@
 package com.ehealthinformatics.prognocare.data.remote.api
 
 import com.ehealthinformatics.prognocare.data.remote.models.CreateStaffDto
+import com.ehealthinformatics.prognocare.data.remote.models.PaginatedResponse
 import com.ehealthinformatics.prognocare.data.remote.models.Staff
 import com.ehealthinformatics.prognocare.data.remote.models.UpdateStaffDto
 import retrofit2.Response
@@ -21,7 +22,7 @@ interface StaffApi {
         @Query("category") category: String? = null,
         @Query("department") department: String? = null,
         @Query("isActive") isActive: Boolean? = null,
-    ): Response<List<Staff>>
+    ): Response<PaginatedResponse<Staff>>
 
     @POST("api/staff")
     suspend fun create(@Body dto: CreateStaffDto): Response<Staff>

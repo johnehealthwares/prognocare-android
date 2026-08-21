@@ -12,6 +12,7 @@ import kotlinx.serialization.Serializable
 object Routes {
     const val LOGIN = "login"
     const val SPLASH = "splash"
+    const val SETTINGS = "settings"
 }
 
 // ── Doctor ────────────────────────────────────────────────────
@@ -47,6 +48,7 @@ object NurseRoutes {
 object PatientRoutes {
     const val DASHBOARD = "patient/dashboard"
     const val APPOINTMENTS = "patient/appointments"
+    const val BOOKING = "patient/booking"
     const val RECORDS = "patient/records"
     const val MEDICATIONS = "patient/medications"
 }
@@ -57,6 +59,10 @@ object SpecialistRoutes {
     const val DASHBOARD = "specialist/dashboard"
     const val REFERRALS = "specialist/referrals"
     const val PATIENT_LIST = "specialist/patients"
+    const val REFERRAL_DETAIL = "specialist/referrals/{referralId}"
+    const val CONSULTATION_NOTES = "specialist/consultation-notes"
+
+    fun referralDetail(referralId: String) = "specialist/referrals/$referralId"
 }
 
 // ── Therapist ─────────────────────────────────────────────────
@@ -65,6 +71,11 @@ object TherapistRoutes {
     const val DASHBOARD = "therapist/dashboard"
     const val SESSIONS = "therapist/sessions"
     const val PATIENT_LIST = "therapist/patients"
+    const val SESSION_DETAIL = "therapist/sessions/{sessionId}"
+    const val THERAPY_PLAN = "therapist/plan"
+    const val ASSESSMENT = "therapist/assessment"
+
+    fun sessionDetail(sessionId: String) = "therapist/sessions/$sessionId"
 }
 
 // ── Technician ────────────────────────────────────────────────
@@ -119,6 +130,19 @@ object ChatRoutes {
 
 object ProfileRoutes {
     const val PROFILE = "profile"
+}
+
+// ── Forms (dynamic documentation, shared) ──────────────────────
+
+object FormsRoutes {
+    const val PICKER = "forms?patientId={patientId}&visitId={visitId}&encounterId={encounterId}"
+    const val FORM = "forms/{formId}?patientId={patientId}&visitId={visitId}&encounterId={encounterId}"
+
+    fun picker(patientId: String? = null, visitId: String? = null, encounterId: String? = null): String =
+        "forms?patientId=${patientId.orEmpty()}&visitId=${visitId.orEmpty()}&encounterId=${encounterId.orEmpty()}"
+
+    fun form(formId: String, patientId: String? = null, visitId: String? = null, encounterId: String? = null): String =
+        "forms/$formId?patientId=${patientId.orEmpty()}&visitId=${visitId.orEmpty()}&encounterId=${encounterId.orEmpty()}"
 }
 
 // ── Role enum ─────────────────────────────────────────────────
